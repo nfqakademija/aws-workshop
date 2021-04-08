@@ -12,3 +12,7 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# App generated files
+teacher/cfn-stack.local.yaml
+teacher/students.local.yaml

@@ -1,0 +1,42 @@
+Description:
+  AWS workshop
+
+Resources:
+  Ec2ConnectPolicy:
+    Type: AWS::IAM::Policy
+    Properties: 
+      PolicyName: WorkShopConnectToEc2
+      Groups:
+        - !Ref Colleagues
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - "ec2:Describe*"
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - "ssm:StartSession"
+            Resource: "*" # Lower in the future
+
+  Colleagues:
+    Type: AWS::IAM::Group
+    Properties: 
+      GroupName: "AwsWorkshopParticipants"
+      Path: "/aws-workshop/"
+
+  Colleague1: #  by generate.php script
+    Type: AWS::IAM::User
+    Properties: 
+      Groups:
+        - !Ref Colleagues
+      LoginProfile: 
+        Password: "SOME-RADOM-PASSWORD" # To be overwritten  by generate.php script
+      Path: "/aws-workshop/"
+      UserName: "example@example.com" # To be overwritten by generate.php script
+
+Outputs:
+  LoginUrl:
+    Description: Path to login to specific AWS account
+    Value: !Sub "https://${AWS::AccountId}.signin.aws.amazon.com/console/" # E.g. https://327920853133.signin.aws.amazon.com/console/

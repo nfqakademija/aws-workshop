@@ -1,0 +1,10 @@
+[
+    {
+      "Key": "Application",
+      "Value": "AWS Workshop"
+    },
+    {
+        "Key": "DTAP",
+        "Value": "PoC"
+      }
+  ]
