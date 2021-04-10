@@ -43,3 +43,13 @@ See [docs for getting personalized credentials](student/README)
    (preferably via Pull requests)
  * Fork and do your own (and better) version
    (future of learning should be interactive and open-source)
+
+# LICENCE
+
+Code and documentation is under MIT.
+
+Browser will access other libraries/ilustrations via external links
+with their respective licenses.
+
+Some themes illustrations are under Creative Commons,
+so they are included as an optional dependency.

@@ -14,5 +14,9 @@ ehthumbs.db
 Thumbs.db
 
 # App generated files
-teacher/cfn-stack.local.yaml
-teacher/students.local.yaml
+cfn-stack.local.yaml
+students.local.yaml
+
+# Drop-in repositories (because differ in license)
+# See https://gist.github.com/aurelijusb/2b53a0765d71af492e73e9533ac6fef7
+student/spacex-theme
