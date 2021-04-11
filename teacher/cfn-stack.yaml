@@ -36,7 +36,18 @@ Resources:
       Path: "/aws-workshop/"
       UserName: "example@example.com" # To be overwritten by generate.php script
 
+  Colleague1AccessKey:  
+    Type: AWS::IAM::AccessKey
+    Properties: 
+      UserName: !Ref Colleague1
+
 Outputs:
   LoginUrl:
     Description: Path to login to specific AWS account
     Value: !Sub "https://${AWS::AccountId}.signin.aws.amazon.com/console/" # E.g. https://327920853133.signin.aws.amazon.com/console/
+  Colleague1AccessKeyId:
+    Description: accessKeyId for SDK
+    Value: !Ref Colleague1AccessKey
+  Colleague1SecretKey:
+    Description: secretAccessKey for SDK
+    Value: !GetAtt Colleague1AccessKey.SecretAccessKey

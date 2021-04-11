@@ -14,3 +14,9 @@
 .page--full h1 {
     text-align: center;
 }
+
+.preformatted {
+    font-family: monospace;
+    white-space: pre;
+    overflow: scroll;
+}

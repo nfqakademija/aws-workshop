@@ -30,4 +30,24 @@ foreach ($students as $i => $email) {
     $template['Resources'][$resourceName] = $colleague;
 }
 
+$colleagueAccessKey = $template['Resources']['Colleague1AccessKey'];
+unset($template['Resources']['Colleague1AccessKey']);
+$outputAccessKeyId = $template['Outputs']['Colleague1AccessKeyId'];
+unset($template['Outputs']['Colleague1AccessKeyId']);
+$outputSecretKey = $template['Outputs']['Colleague1SecretKey'];
+unset($template['Outputs']['Colleague1SecretKey']);
+
+
+foreach (array_keys($students) as $i) {
+    $resourceName = 'Colleague' . ($i + 1);
+    $colleagueAccessKey['Properties']['UserName'] = ['Ref' => $resourceName];
+    $template['Resources'][$resourceName . 'AccessKey'] = $colleagueAccessKey;
+
+    $outputAccessKeyId['Value'] = ['Ref' => $resourceName . 'AccessKey'];
+    $template['Outputs'][$resourceName . 'AccessKeyId'] = $outputAccessKeyId;
+
+    $outputSecretKey['Value'] = ['Fn::GetAtt' => [$resourceName . 'AccessKey', 'SecretAccessKey']];
+    $template['Outputs'][$resourceName . 'SecretKey'] = $outputSecretKey;
+}
+
 echo yaml_emit($template);
