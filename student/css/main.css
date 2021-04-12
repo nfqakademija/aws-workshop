@@ -15,7 +15,7 @@
     text-align: center;
 }
 
-.preformatted {
+.status--preformatted {
     font-family: monospace;
     white-space: pre;
     overflow: scroll;

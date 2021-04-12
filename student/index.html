@@ -47,6 +47,8 @@
                         <button v-on:click="login" class="btn waves-effect waves-light" type="button">Start the game (workshop)
                             <i class="material-icons right">send</i>
                         </button>
+                        <button v-on:click="debugCloudTrail" class="btn waves-effect waves-dark" type="button">Debug CloudTrail</button>
+                        <button v-on:click="debugScore" class="btn waves-effect waves-dark" type="button">Debug Score</button>
                     </div>
                     <div class="input-field col s6">
                         <div v-if="loading" class="preloader-wrapper small active">
@@ -60,7 +62,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="statusMessage != ''" class="collection z-depth-2 preformatted">{{ statusMessage }}</div>
+                        <div v-if="statusMessage != ''" class="collection z-depth-2 status--preformatted">{{ statusMessage }}</div>
                     </div>
                 </div>
             </form>
@@ -179,6 +181,7 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="js/score.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

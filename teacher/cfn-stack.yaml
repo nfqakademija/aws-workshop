@@ -19,6 +19,11 @@ Resources:
             Action:
               - "ssm:StartSession"
             Resource: "*" # Lower in the future
+          - Effect: Allow
+            Action:
+              - "cloudtrail:*"
+            Resource: "*" # Lower in the future
+
 
   Colleagues:
     Type: AWS::IAM::Group
