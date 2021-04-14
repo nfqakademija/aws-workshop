@@ -20,7 +20,7 @@ const cache = {
 }
 
 var awsLogin = new Vue({
-    el: '#credentials-form',
+    el: '#spa',
     data: {
         accessKey: cache.get('awsWorkshopAccessKey'),
         secretKey: cache.get('awsWorkshopSecretKey'),
@@ -30,7 +30,8 @@ var awsLogin = new Vue({
         aws: {
             accountId: "",
             userName: "",
-        }
+        },
+        personalScore: [],
     },
     methods: {
         configureAws: function () {
@@ -82,7 +83,9 @@ var awsLogin = new Vue({
             try {
                 this.loading = true;
                 let cl = new AWS.CloudTrail();
+                let startTime = Math.floor(new Date().getTime() / 1000) - (60*30);
                 let result = await cl.lookupEvents({
+                    StartTime: startTime,
                     LookupAttributes: [
                         {
                             AttributeKey: 'Username',
@@ -103,8 +106,9 @@ var awsLogin = new Vue({
              // Trying to fetch cloud trail data
              try {
                  this.loading = true;
-                 let result = await getScore(this.aws.userName);
+                 let result = await getScore(this.aws.userName, scoreTemplate);
                  this.statusMessage = JSON.stringify(result, null, 2);
+                 this.personalScore = minifiedScore(result);
              } catch (error) {
                  this.statusMessage = 'ERROR: ' + error;
              }

@@ -34,4 +34,13 @@ aws cloudformation update-stack \
     --tags file://cfn-tags.json
 ```
 
+## Known issues and limitations
+
+ * Delay of CloudTrail is [~15 min](https://aws.amazon.com/cloudtrail/faqs/),
+   so not suitable for real time game/monitoring
+
+## Refrences
+
+* https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html
+
 _TO BE CONTINUED..._

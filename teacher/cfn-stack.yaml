@@ -18,6 +18,8 @@ Resources:
           - Effect: Allow
             Action:
               - "ssm:StartSession"
+              - "ssm:DescribeInstanceInformation"
+              - "ssm:GetConnectionStatus"
             Resource: "*" # Lower in the future
           - Effect: Allow
             Action:

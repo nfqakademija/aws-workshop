@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="spacex-theme/theme.css">
 </head>
 <body>
+<div id="spa">
+
     <div class="page page--full page--dive-into-the-cloud">
         <h1>Dive into the Cloud</h1>
     </div>
@@ -67,6 +69,12 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <div class="page">
+        <h1>Your score</h1>
+        <score v-bind:scores="personalScore"></score>
+        Intermediate results may have delay of ~15 minutes
     </div>
 
     <div class="page page--full page--on-the-ground">
@@ -180,6 +188,7 @@
             <a href="https://aws.amazon.com/console/" class="collection-item">Lorem ipsum<span class="badge">Docs</span></a>
         </div>
     </div>
+</div>
 
     <script type="text/javascript" src="js/score.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
