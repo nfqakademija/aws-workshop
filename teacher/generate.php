@@ -19,12 +19,24 @@ if (file_exists("students.local.yaml")) {
     $students = yaml_parse(file_get_contents("students.yaml"));
 }
 
+// Cache passwords, so Student UI would not need to refresh them after change in template
+$passwords = [];
+if (file_exists("students.passwords.local.yaml")) {
+    $passwords = yaml_parse(file_get_contents("students.passwords.local.yaml"));
+} else {
+    foreach (array_keys($students) as $i) {
+        $passwords[$i] = bin2hex(openssl_random_pseudo_bytes(10)) . 'U-' . bin2hex(openssl_random_pseudo_bytes(10));
+    }
+    file_put_contents("students.passwords.local.yaml", yaml_emit($passwords));
+}
+
+
 $colleague = $template['Resources']['Colleague1'];
 unset($template['Resources']['Colleague1']);
 
 foreach ($students as $i => $email) {
-    # Password need upper, lower, number, special char
-    $colleague["Properties"]['LoginProfile']['Password'] = bin2hex(openssl_random_pseudo_bytes(10)) . 'U-' . bin2hex(openssl_random_pseudo_bytes(10));
+    // Password need upper, lower, number, special char
+    $colleague["Properties"]['LoginProfile']['Password'] = $passwords[$i];
     $colleague["Properties"]['UserName'] = $email;
     $resourceName = 'Colleague' . ($i + 1);
     $template['Resources'][$resourceName] = $colleague;

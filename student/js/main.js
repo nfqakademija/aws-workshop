@@ -113,6 +113,28 @@ var awsLogin = new Vue({
                  this.statusMessage = 'ERROR: ' + error;
              }
              this.loading = false;
+        },
+        debugLambda: async function() {
+             // Configure AWS SDK
+             this.configureAws();
+
+             // Trying to fetch cloud trail data
+             try {
+                 this.loading = true;
+                 var lambda = new AWS.Lambda();
+                 let result = await lambda.invoke({
+                    FunctionName: "aws-workshop-CheckTaskLambda-ENQM9V50WEIP",  // For future: load from config
+                    Payload: JSON.stringify({
+                        "some": "data"
+                    }),
+                    ClientContext: btoa(JSON.stringify({"my": {"caller": "context"}}))
+                 }).promise();
+                 this.statusMessage = "Status: " + result.StatusCode + "\n" + JSON.stringify(JSON.parse(result.Payload), null, 2);
+             } catch (error) {
+                 this.statusMessage = 'ERROR: ' + error;
+             }
+             this.loading = false;
+            
         }
     }
 });

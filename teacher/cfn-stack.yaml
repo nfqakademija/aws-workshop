@@ -25,6 +25,12 @@ Resources:
             Action:
               - "cloudtrail:*"
             Resource: "*" # Lower in the future
+          - Effect: Allow
+            Action:
+              - "lambda:InvokeFunction"
+            Resource:
+              - !GetAtt CheckTaskLambda.Arn
+
 
 
   Colleagues:
@@ -48,10 +54,55 @@ Resources:
     Properties: 
       UserName: !Ref Colleague1
 
+  CheckTaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: "/aws-workshop/"
+      ManagedPolicyArns:
+       - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+       - PolicyName: "CheckTaskPolicy"
+         PolicyDocument:
+           Version: "2012-10-17"
+           Statement:
+              - Effect: "Allow"
+                Action: "s3:*"
+                Resource: "*" # Lower in the future
+
+  CheckTaskLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      MemorySize: 128
+      Role: !GetAtt CheckTaskRole.Arn
+      Runtime: nodejs12.x
+      Timeout: 3
+      Code:
+        ZipFile: |
+          exports.handler = async (event, context) => {
+            return {
+              "given": event,
+              "generated": "result",
+              "context": context.clientContext
+            };
+          }
+
 Outputs:
   LoginUrl:
     Description: Path to login to specific AWS account
     Value: !Sub "https://${AWS::AccountId}.signin.aws.amazon.com/console/" # E.g. https://327920853133.signin.aws.amazon.com/console/
+  CheckTaskLambdaName:
+    Description: "Lambda name to be used in student's UI"
+    Value: !Ref CheckTaskLambda
   Colleague1AccessKeyId:
     Description: accessKeyId for SDK
     Value: !Ref Colleague1AccessKey

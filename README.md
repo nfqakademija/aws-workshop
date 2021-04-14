@@ -42,7 +42,21 @@ See [docs for getting personalized credentials](student/README)
  * Improve links to **documentation**, the wording of the tasks, etc
    (preferably via Pull requests)
  * Fork and do your own (and better) version
-   (future of learning should be interactive and open-source)
+   (future of learning should  be interactive and open-source)
+
+## TODO
+
+- [x] Call lambda
+- [ ] Check score on frontend
+- [ ] Store score by Lambda on S3
+- [ ] Frontend: Read scores of all (teacher would use user's flow)
+
+- [ ] Improve actual tasks
+- [ ] End-to-end tests
+
+- [ ] Improve UI/UX
+- [ ] Append CloudTrail data
+
 
 # LICENCE
 
