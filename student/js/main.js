@@ -21,20 +21,25 @@ const cache = {
 
 var awsLogin = new Vue({
     el: '#spa',
-    data: {
-        accessKey: cache.get('awsWorkshopAccessKey'),
-        secretKey: cache.get('awsWorkshopSecretKey'),
-        region: 'eu-west-1',
-        loading: false,
-        statusMessage: "",
-        aws: {
-            accountId: "",
-            userName: "",
-        },
-        personalScore: [],
+    data: function () {
+        return {
+            accessKey: cache.get('awsWorkshopAccessKey') || Config.aws.accessKey,
+            secretKey: cache.get('awsWorkshopSecretKey') || Config.aws.secretKey,
+            region: Config.aws.region,
+            loading: false,
+            statusMessage: "",
+            aws: {
+                accountId: Config.aws.accountId,
+                userName: Config.aws.userName,
+                password: Config.aws.password
+            },
+            personalScore: [],
+        };
     },
     methods: {
         configureAws: function () {
+            //FIXME:
+            console.info("configureAws");
             AWS.config.setPromisesDependency(Promise);
             AWS.config.update({
                 region: this.region,
@@ -123,7 +128,7 @@ var awsLogin = new Vue({
                  this.loading = true;
                  var lambda = new AWS.Lambda();
                  let result = await lambda.invoke({
-                    FunctionName: "aws-workshop-CheckTaskLambda-ENQM9V50WEIP",  // For future: load from config
+                    FunctionName: Config.lambda.checkTask,
                     Payload: JSON.stringify({
                         "some": "data"
                     }),
