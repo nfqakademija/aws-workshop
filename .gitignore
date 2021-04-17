@@ -17,6 +17,7 @@ Thumbs.db
 cfn-stack.local.yaml
 students.local.yaml
 students.passwords.local.yaml
+config.local.js
 
 # Drop-in repositories (because differ in license)
 # See https://gist.github.com/aurelijusb/2b53a0765d71af492e73e9533ac6fef7
@@ -24,3 +25,8 @@ student/spacex-theme
 
 # Temporary while developing learning material
 student/examples
+
+# Serverless/Node.js generated files
+node_modules
+jspm_packages
+.serverless

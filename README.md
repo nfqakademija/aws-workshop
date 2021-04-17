@@ -8,11 +8,11 @@ Created by developers to developers.
 
 ## For lecturer (AWS guru)
 
-See [docs for setting up infrastructure](teacher/README)
+See [docs for setting up infrastructure](teacher/README.md)
 
 ## For student (colleague)
 
-See [docs for getting personalized credentials](student/README)
+See [docs for getting personalized credentials](student/README.md)
 
 ## Why
 
@@ -52,10 +52,14 @@ See [docs for getting personalized credentials](student/README)
 - [ ] Frontend: Read scores of all (teacher would use user's flow)
 
 - [ ] Improve actual tasks
+- [ ] Store Frontend on S3
+- [ ] Credentials from e-mail
 - [ ] End-to-end tests
 
+- [ ] Limit IAM access
 - [ ] Improve UI/UX
 - [ ] Append CloudTrail data
+- [ ] Replace this.$parent to Vue $emit
 
 
 # LICENCE

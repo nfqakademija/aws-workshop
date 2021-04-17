@@ -6,6 +6,32 @@ Ideally it whole setup should be automated as much as possible
 
 Take advantage of IAM users per student and CloutTrail for tracking progress.
 
+## Installing dependencies
+
+* [Serverless](https://www.serverless.com/framework/docs/getting-started/)
+```shell
+sudo npm install -g serverless@v2.35.0
+```
+> `sls --version` should print `Framework Core: 2.35.0` 
+
+```shell
+sls deploy
+```
+> Will create `aws-workshop-dev` CloudFormation stack
+
+```shell
+serverless invoke --function checkTask --data '{"some":"input"}' --context '{"clientContext":"student"}'
+```
+> Will print JSON output from Lambda
+
+```shell
+sls package
+```
+> Without deploying, will generate in `.serverless` files for CloudFormation and Lambda upload zip 
+
+# Depracated
+
+
 ## Generating template
 
 ```bash
@@ -39,8 +65,9 @@ aws cloudformation update-stack \
  * Delay of CloudTrail is [~15 min](https://aws.amazon.com/cloudtrail/faqs/),
    so not suitable for real time game/monitoring
 
-## Refrences
+## References
 
 * https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html
+* https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
 
 _TO BE CONTINUED..._
