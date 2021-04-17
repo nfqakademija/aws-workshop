@@ -1,30 +1,9 @@
-const cache = {
-    get: (name) => {
-        let localStorage = window.localStorage;
-        if (!localStorage) {
-            return '';
-        }
-        return localStorage.getItem(name);
-    },
-    set: (name, value) => {
-        let localStorage = window.localStorage;
-        if (!localStorage) {
-            return;
-        }
-        if (!value) {
-            localStorage.removeItem(name);
-            return;
-        }
-        localStorage.setItem(name, value);
-    },
-}
-
 var awsLogin = new Vue({
     el: '#spa',
     data: function () {
         return {
-            accessKey: cache.get('awsWorkshopAccessKey') || Config.aws.accessKey,
-            secretKey: cache.get('awsWorkshopSecretKey') || Config.aws.secretKey,
+            accessKey: Config.aws.accessKey,
+            secretKey: Config.aws.secretKey,
             region: Config.aws.region,
             loading: false,
             statusMessage: "",

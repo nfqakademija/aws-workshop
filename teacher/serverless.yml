@@ -47,3 +47,11 @@ resources:
           Password: "W1LL_be_OVERWRITTEN" # See workshopUsers.js
         Path: "/aws-workshop/"
         UserName: "example@example.com" # See workshopUsers.js
+
+  Outputs:
+    AccountId:
+      Description: AWS Account number, where all tasks should be executed on
+      Value: !Ref "AWS::AccountId"
+    CheckTaskLambdaFunctionName:
+      Description: Name to be used when invoking via SDK
+      Value: !Ref CheckTaskLambdaFunction # Name is generated from "functions" part of the file

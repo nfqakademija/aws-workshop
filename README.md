@@ -60,7 +60,7 @@ See [docs for getting personalized credentials](student/README.md)
 - [ ] Improve UI/UX
 - [ ] Append CloudTrail data
 - [ ] Replace this.$parent to Vue $emit
-
+- [ ] Adding new student without regenerating password
 
 # LICENCE
 
