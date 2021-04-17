@@ -13,10 +13,14 @@ provider:
   stackTags:
     Description: AWS-Workshop
 
+plugins:
+  - workshopUsers
+
 package:
   patterns:
     - src/**
     - '!.npmignore'
+    - '!.serverless_plugins'
     - '!README.md'
 
 functions:
@@ -24,13 +28,22 @@ functions:
     handler: src/checkTask.hadnler
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+resources:
+  Resources:
+    Colleagues:
+      Type: AWS::IAM::Group
+      Properties:
+        GroupName: "AwsWorkshopParticipants"
+        Path: "/aws-workshop/"
+
+    Colleague:
+      Type: AWS::IAM::User
+      Metadata:
+        "Serverless::Plugin::WorkshopUsers": "duplicate-with-user-and-password"
+      Properties:
+        Groups:
+          - !Ref Colleagues
+        LoginProfile:
+          Password: "W1LL_be_OVERWRITTEN" # See workshopUsers.js
+        Path: "/aws-workshop/"
+        UserName: "example@example.com" # See workshopUsers.js

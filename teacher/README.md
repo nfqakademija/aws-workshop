@@ -25,6 +25,11 @@ serverless invoke --function checkTask --data '{"some":"input"}' --context '{"cl
 > Will print JSON output from Lambda
 
 ```shell
+cp config/students.yml config/students.local.yml
+```
+> Please update students lists in `students.local.yml`:
+
+```shell
 sls package
 ```
 > Without deploying, will generate in `.serverless` files for CloudFormation and Lambda upload zip 
@@ -69,5 +74,4 @@ aws cloudformation update-stack \
 
 * https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html
 * https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
-
-_TO BE CONTINUED..._
+* https://serverlesscode.com/post/customizing-serverless-with-plugins/

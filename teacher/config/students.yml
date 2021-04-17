@@ -1,0 +1,10 @@
+# Use YAML array to specify Lecture users
+# Those will be used with workshopUsers.js and Serverless::Plugin::WorkshopUsers": "duplicate-with-user-and-password"
+# Copy to students.local.yml to separate generic code and local configuration
+
+- example@example.com
+
+# Other examples:
+# - foo@bar.lt
+# - justRegularString
+# - anythingThatIsAllowedByAws
