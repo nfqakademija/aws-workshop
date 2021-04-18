@@ -79,6 +79,11 @@
     </div>
 
     <div class="page">
+        <h1>Score board</h1>
+        <score v-bind:storage="storage.scoresBucket" v-bind:max="storage.maxScore" v-bind:players="students"></score>
+    </div>
+
+    <div class="page">
         <h3>Before we start learning...</h3>
         
         <question v-bind:player="aws.userName" task="0.1.SystemTest" value="yes">

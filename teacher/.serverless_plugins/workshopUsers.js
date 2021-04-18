@@ -220,7 +220,8 @@ class ServerlessPlugin {
             },
             "storage": {
                 "scoresBucket": outputByKey.ScoresBucketName
-            }
+            },
+            "students": students
         }
         const fileContent = 'var Config = ' + JSON.stringify(config, null, 2);
 

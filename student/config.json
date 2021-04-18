@@ -12,5 +12,9 @@
     },
     "storage": {
         "scoresBucket": ""
-    }
+    },
+    "students": [
+        "example@example.com",
+        "someFooBar"
+    ]
 }

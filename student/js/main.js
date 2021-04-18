@@ -17,6 +17,7 @@ var awsLogin = new Vue({
                 maxScore: 20
             },
             personalScore: [],
+            students: Config.students
         };
     },
     methods: {
@@ -65,7 +66,7 @@ var awsLogin = new Vue({
             try {
                 this.loading = true;
                 let cl = new AWS.CloudTrail();
-                let startTime = Math.floor(new Date().getTime() / 1000) - (60*30);
+                let startTime = Math.floor(new Date().getTime() / 1000) - (60 * 30);
                 let result = await cl.lookupEvents({
                     StartTime: startTime,
                     LookupAttributes: [
@@ -81,42 +82,42 @@ var awsLogin = new Vue({
             }
             this.loading = false;
         },
-        debugScore: async function() {
-             // Configure AWS SDK
-             this.configureAws();
+        debugScore: async function () {
+            // Configure AWS SDK
+            this.configureAws();
 
-             // Trying to fetch cloud trail data
-             try {
-                 this.loading = true;
-                 let result = await getScore(this.aws.userName, scoreTemplate);
-                 this.statusMessage = JSON.stringify(result, null, 2);
-                 this.personalScore = minifiedScore(result);
-             } catch (error) {
-                 this.statusMessage = 'ERROR: ' + error;
-             }
-             this.loading = false;
+            // Trying to fetch cloud trail data
+            try {
+                this.loading = true;
+                let result = await getScore(this.aws.userName, scoreTemplate);
+                this.statusMessage = JSON.stringify(result, null, 2);
+                this.personalScore = minifiedScore(result);
+            } catch (error) {
+                this.statusMessage = 'ERROR: ' + error;
+            }
+            this.loading = false;
         },
-        debugLambda: async function() {
-             // Configure AWS SDK
-             this.configureAws();
+        debugLambda: async function () {
+            // Configure AWS SDK
+            this.configureAws();
 
-             // Trying to fetch cloud trail data
-             try {
-                 this.loading = true;
-                 var lambda = new AWS.Lambda();
-                 let result = await lambda.invoke({
+            // Trying to fetch cloud trail data
+            try {
+                this.loading = true;
+                var lambda = new AWS.Lambda();
+                let result = await lambda.invoke({
                     FunctionName: Config.lambda.checkTask,
                     Payload: JSON.stringify({
                         "some": "data"
                     }),
                     ClientContext: btoa(JSON.stringify({"my": {"caller": "context"}}))
-                 }).promise();
-                 this.statusMessage = "Status: " + result.StatusCode + "\n" + JSON.stringify(JSON.parse(result.Payload), null, 2);
-             } catch (error) {
-                 this.statusMessage = 'ERROR: ' + error;
-             }
-             this.loading = false;
-            
+                }).promise();
+                this.statusMessage = "Status: " + result.StatusCode + "\n" + JSON.stringify(JSON.parse(result.Payload), null, 2);
+            } catch (error) {
+                this.statusMessage = 'ERROR: ' + error;
+            }
+            this.loading = false;
+
         }
     }
 });

@@ -25,18 +25,25 @@
     max-width: 99%;
     overflow-x: scroll;
     overflow-y: hidden;
-    height: 100px;
+    min-height: 100px;
     display: block;
+}
+
+.score__refresh-line, .score__refresh-line button {
+    font-size: smaller;
 }
 
 .score__icons .score__icon_plane {
     width: 1000px; /* 50px * 20 elements */
+    height: 130px; /* 100px + 20px for user name */
 }
 
-.score__icons .score__icon_plane .score__icon_wrapper {
-    display: inline;
+.score__icons .score__icon_plane .score__username {
+    height: 30px;
+    font-weight: bolder;
+    padding-top: 15px;
 }
-.score__icons .score__icon_plane .score__icon_wrapper .score__icon {
+.score__icons .score__icon_plane .score__icon {
     width: 50px;
     height: 100px;
     border: 0;

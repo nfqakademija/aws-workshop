@@ -18,7 +18,7 @@ function promisify(callback) {
         } catch (error) {
             reject(error);
         }
-        
+
     })
 }
 
@@ -82,21 +82,38 @@ Vue.component('score-item', {
     }
 });
 
+function fillObjects(grouped, filler, max) {
+    for (const key in grouped) {
+        for (let i = grouped[key].length; i < max; i++) {
+            grouped[key].push(filler);
+        }
+    }
+    return grouped;
+}
+
+function fillKeys(grouped, keys) {
+    for (const key of keys) {
+        if (!grouped.hasOwnProperty(key)) {
+            grouped[key] = [];
+        }
+    }
+    return grouped;
+}
+
 Vue.component('score', {
     template: `
     <div>
-        <div>
+        <div class="score__refresh-line">
             {{statusMessage}}
             <button v-if="tillRefresh > 1" v-on:click="refreshNow" class="btn waves-effect waves-light btn-small" type="button">Refresh now</button>
             </div>
-        <div class="progress" v-bind:title="percentScore">
+        <div v-if="players.length < 1" class="progress" v-bind:title="percentScore">
             <div class="determinate" v-bind:style="style"></div>
         </div>
         <div class="score__icons">
-            <div class="score__icon_plane">
-                <div v-for="(icon, index) in icons" class="score__icon_wrapper">
-                    <score-item v-bind:icon="icon">{{index+1}}</score-item>
-                </div>
+            <div v-for="(icons, username) in byUserName" v-bind:key="username" class="score__icon_plane">
+                <div class="score__username" v-if="players.length > 1">{{username}}:</div>
+                <score-item v-for="(icon, index) in icons" v-bind:key="index" v-bind:icon="icon">{{index+1}}</score-item>
             </div>
         </div>
     </div>`,
@@ -110,12 +127,19 @@ Vue.component('score', {
             required: true
         },
         username: {
-            type: String
+            type: String,
+            default: ''
+        },
+        players: {
+            type: Array,
+            default: function () {
+                return [];
+            }
         }
     },
     data() {
         return {
-            tillRefresh: 1,
+            tillRefresh: 10,
             statusMessage: "Loading...",
             isTruncated: false,
             contents: [
@@ -126,14 +150,14 @@ Vue.component('score', {
                     "Size": 39,
                     "StorageClass": "STANDARD"
                 }
-            ]
+            ],
         }
     },
     mounted() {
         setTimeout(this.countdown, 500);
     },
     computed: {
-        percentScore: function() {
+        percentScore: function () {
             return (this.contents.length / this.max * 100) + '%'
         },
         style: function () {
@@ -141,23 +165,26 @@ Vue.component('score', {
                 width: this.percentScore
             }
         },
-        icons: function () {
-            let result = [];
-            for (let i=0; i < this.max; i++) {
-                if (i < this.contents.length) { // Will grep by predefined list
-                    result.push({
-                        passed: true,
-                        name: this.contents[i].Key.split("/")[1].replace(/\.json/, '')
-                    });
-                } else {
-                    result.push({
-                        passed: false,
-                        name: 'future task'
-                    });
+        byUserName: function () {
+            let result = fillKeys({}, this.players);
+            for (const item of this.contents) {
+                const [userName, fileName] = item.Key.split('/')
+                const taskName = fileName.replace(/\.json/, '')
+                if (!result.hasOwnProperty(userName)) {
+                    result[userName] = [];
                 }
+                result[userName].push({
+                    passed: true,
+                    name: taskName
+                })
             }
-            return result;
-        }
+            const filler = {
+                passed: false,
+                name: 'future tasks'
+            }
+
+            return fillObjects(result, filler, this.max);
+        },
     },
     methods: {
         refreshNow() {

@@ -47,9 +47,9 @@ See [docs for getting personalized credentials](student/README.md)
 ## TODO
 
 - [x] Call lambda
-- [ ] Check score on frontend
+- [x] Check score on frontend
 - [x] Store score by Lambda on S3
-- [ ] Frontend: Read scores of all (teacher would use user's flow)
+- [x] Frontend: Read scores of all (teacher would use user's flow)
 
 - [ ] Improve actual tasks
 - [ ] Store Frontend on S3
