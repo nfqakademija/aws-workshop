@@ -23,47 +23,64 @@
 
     <div class="page">
         <div class="row">
-            <h3>Logins for AWS (workshop)</h3>
-            <form id="credentials-form" class="col s12">
+            <form class="col s12 login-form">
                 <div class="row">
                     <div class="input-field col s6">
-                        <input v-model="aws.userName" placeholder="User name" id="user_name" type="text" class="validate"/>
-                        <label for="user_name">Username</label>
+                        <h2>Logins</h2>
+                        <h3>For you</h3>
+                        <div>
+                            <input v-model="aws.accountId" placeholder="User name" id="account_id" type="text" class="validate"/>
+                            <label for="account_id">Account ID (12 digits) or account alias</label>
+                        </div>
+                        <div>
+                            <input v-model="aws.userName" placeholder="User name" id="user_name" type="text" class="validate"/>
+                            <label for="user_name">IAM user name</label>
+                        </div>
+                        <div>
+                            <input v-model="aws.password" id="password" v-bind:type="showPasswords ? 'text' : 'password'" class="validate"/>
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="login-form__submit-area">
+                            <button v-on:click="showPasswords = !showPasswords" class="btn waves-effect waves-light" type="button">Show passwords
+                                <i class="material-icons right" title="show passwords">visibility</i>
+                            </button>
+                            <a v-bind:href="'https://'+aws.accountId+'.signin.aws.amazon.com/console/'" target="_blank" class="btn waves-effect waves-light" type="button">
+                                Go to AWS Console <i class="material-icons right">send</i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="input-field col s6">
-                        <input v-model="aws.password" id="password" type="password" class="validate"/>
-                        <label for="password">Password</label>
+                    <div class="input-field col s6 ">
+                        <img src="img/aws-illustration.jpg" width="345" height="514" alt="Illustration of AWS Login form"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s6">
-                        <input v-model="accessKey" placeholder="Access key id" id="access_key" type="text" class="validate"/>
-                        <label for="access_key">Access key</label>
+                        <h3>For the WebSite</h3>
+                        <div>
+                            <input v-model="accessKey" placeholder="Access key id" id="access_key" type="text" class="validate"/>
+                            <label for="access_key">Access key</label>
+                        </div>
+                        <div>
+                            <input v-model="secretKey" id="secret_key" type="password" class="validate"/>
+                            <label for="secret_key">Secret key</label>
+                        </div>
+                        <div class="login-form__submit-area">
+                            <button v-on:click="login" class="btn waves-effect waves-light" type="button">Test logins
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
                     </div>
                     <div class="input-field col s6">
-                        <input v-model="secretKey" id="secret_key" type="password" class="validate"/>
-                        <label for="secret_key">Secret key</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s6">
-                        <button v-on:click="login" class="btn waves-effect waves-light" type="button">Start the game (workshop)
-                            <i class="material-icons right">send</i>
-                        </button>
-                        <button v-on:click="debugCloudTrail" class="btn waves-effect waves-dark" type="button">Debug CloudTrail</button>
-                        <button v-on:click="debugScore" class="btn waves-effect waves-dark" type="button">Debug Score</button>
-                        <button v-on:click="debugLambda" class="btn waves-effect waves-dark" type="button">Debug Lambda</button>
-                    </div>
-                    <div class="input-field col s6">
+                        <img v-if="!loading && statusMessage === ''" src="img/scores-illustration.jpg" width="495" height="383" alt="Scores illustration during the game"/>
                         <div v-if="loading" class="preloader-wrapper small active">
                             <div class="spinner-layer spinner-blue-only">
                                 <div class="circle-clipper left">
                                     <div class="circle"></div>
                                 </div><div class="gap-patch">
-                                    <div class="circle"></div>
-                                </div><div class="circle-clipper right">
-                                    <div class="circle"></div>
-                                </div>
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
                             </div>
                         </div>
                         <div v-if="statusMessage !== ''" class="collection z-depth-2 status--preformatted">{{ statusMessage }}</div>
@@ -73,17 +90,17 @@
         </div>
     </div>
 
-    <div class="page">
+    <div class="page" v-if="secretKey">
         <h1>Your score</h1>
         <score v-bind:username="aws.userName" v-bind:storage="storage.scoresBucket" v-bind:max="storage.maxScore"></score>
     </div>
 
-    <div class="page">
+    <div class="page" v-if="secretKey">
         <h1>Score board</h1>
         <score v-bind:storage="storage.scoresBucket" v-bind:max="storage.maxScore" v-bind:players="students"></score>
     </div>
 
-    <div class="page">
+    <div class="page" v-if="secretKey">
         <h3>Before we start learning...</h3>
         
         <question v-bind:player="aws.userName" task="0.1.SystemTest" value="yes">
@@ -91,11 +108,11 @@
         </question>
     </div>
 
-    <div class="page page--full page--on-the-ground">
+    <div class="page page--full page--on-the-ground" v-if="secretKey">
         <h1>Let's start from the ground</h1>
     </div>
 
-    <div class="page">
+    <div class="page" v-if="secretKey">
         <h3>Getting familiar with AWS</h3>
         Choose your path:
         <a class="waves-effect waves-light btn-small">Easy</a>
@@ -132,74 +149,6 @@
             <a href="https://aws.amazon.com/ec2/" class="collection-item">Virtual machines on AWS<span class="badge">Docs</span></a>
             <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html" class="collection-item">Connect to instance via SSM agent<span class="badge">Docs</span></a>
             <a href="https://aws.amazon.com/console/" class="collection-item">What is AWS Console<span class="badge">Docs</span></a>
-        </div>
-    </div>
-
-    <div class="page">
-        Choose your path:
-        <a class="waves-effect waves-light btn-small">Easy</a>
-        <a class="waves-effect waves-light btn-small">Medium</a>
-        <a class="waves-effect waves-light btn-small">Hard</a>
-
-        <div class="col s12 m7">
-            <h4 class="header">How much it costs?</h4>
-            <div class="card horizontal">
-                <div class="card-stacked">
-                    <div class="card-content">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                    <div class="card-action">
-                        <a href="https://327920853133.signin.aws.amazon.com/console/" target="_blank">Connect to AWS Console (Web system)</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="collection">
-            <a href="#" class="collection-item">Lorem ipsum<span class="badge">Hint</span></a>
-            <a href="#" class="waves-effect waves-light btn-small">need a hint</a>
-            <a href="#" class="waves-effect waves-light btn-small">need a hint</a>
-            <a href="#" class="waves-effect waves-light btn-small">need a hint</a>
-        </div>
-
-        <div class="collection">
-            <a href="https://aws.amazon.com/ec2/" class="collection-item">Lorem ipsum<span class="badge">Docs</span></a>
-            <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html" class="collection-item">Lorem ipsum<span class="badge">Docs</span></a>
-            <a href="https://aws.amazon.com/console/" class="collection-item">Lorem ipsum<span class="badge">Docs</span></a>
-        </div>
-    </div>
-
-    <div class="page">
-        Choose your path:
-        <a class="waves-effect waves-light btn-small">Easy</a>
-        <a class="waves-effect waves-light btn-small">Medium</a>
-        <a class="waves-effect waves-light btn-small">Hard</a>
-
-        <div class="col s12 m7">
-            <h4 class="header">How to make application secure?</h4>
-            <div class="card horizontal">
-                <div class="card-stacked">
-                    <div class="card-content">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                    <div class="card-action">
-                        <a href="https://327920853133.signin.aws.amazon.com/console/" target="_blank">Connect to AWS Console (Web system)</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="collection">
-            <a href="#" class="collection-item">Lorem ipsum<span class="badge">Hint</span></a>
-            <a href="#" class="waves-effect waves-light btn-small">need a hint</a>
-            <a href="#" class="waves-effect waves-light btn-small">need a hint</a>
-            <a href="#" class="waves-effect waves-light btn-small">need a hint</a>
-        </div>
-
-        <div class="collection">
-            <a href="https://aws.amazon.com/ec2/" class="collection-item">Lorem ipsum<span class="badge">Docs</span></a>
-            <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html" class="collection-item">Lorem ipsum<span class="badge">Docs</span></a>
-            <a href="https://aws.amazon.com/console/" class="collection-item">Lorem ipsum<span class="badge">Docs</span></a>
         </div>
     </div>
 </div>
