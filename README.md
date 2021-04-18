@@ -48,7 +48,7 @@ See [docs for getting personalized credentials](student/README.md)
 
 - [x] Call lambda
 - [ ] Check score on frontend
-- [ ] Store score by Lambda on S3
+- [x] Store score by Lambda on S3
 - [ ] Frontend: Read scores of all (teacher would use user's flow)
 
 - [ ] Improve actual tasks
@@ -61,6 +61,8 @@ See [docs for getting personalized credentials](student/README.md)
 - [ ] Append CloudTrail data
 - [ ] Replace this.$parent to Vue $emit
 - [ ] Adding new student without regenerating password
+- [ ] Log invalid ChheckTask inputs in CloudWatch
+- [ ] Lambda: List score S3 to Summary file
 
 # LICENCE
 

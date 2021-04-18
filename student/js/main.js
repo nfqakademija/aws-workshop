@@ -49,10 +49,6 @@ var awsLogin = new Vue({
                 return;
             }
 
-            // Cache valid credentials (for refresh of the page)
-            cache.set('awsWorkshopAccessKey', this.accessKey);
-            cache.set('awsWorkshopSecretKey', this.secretKey);
-
             // Do not refresh the page
             if (event) {
                 event.preventDefault();

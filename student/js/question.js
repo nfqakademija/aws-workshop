@@ -8,7 +8,7 @@ Vue.component('question', {
                 </div>
                 <div class="card-action">
                     <button v-on:click="send('no')" class="btn waves-effect waves-light brown" type="button">No</button>
-                    <button v-on:click="send(this.value)" class="btn waves-effect waves-light" type="button">Yes
+                    <button v-on:click="send(value)" class="btn waves-effect waves-light" type="button">Yes
                         <i class="material-icons right">send</i>
                     </button>
                 </div>
@@ -43,12 +43,13 @@ Vue.component('question', {
             this.loading = true;
             try {
                 var lambda = new AWS.Lambda();
+                let payload = JSON.stringify({
+                    "task": this.task,
+                    "value": value
+                });
                 let result = await lambda.invoke({
                     FunctionName: Config.lambda.checkTask,
-                    Payload: JSON.stringify({
-                        "task": this.task,
-                        "value": value
-                    }),
+                    Payload: payload,
                     ClientContext: btoa(JSON.stringify({ "player": this.player }))
                 }).promise();
                 this.statusMessage = "Status: " + result.StatusCode + "\n" + JSON.stringify(JSON.parse(result.Payload), null, 2);

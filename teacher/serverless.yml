@@ -19,17 +19,50 @@ plugins:
 package:
   patterns:
     - src/**
+    - '!config/**'
     - '!.npmignore'
     - '!.serverless_plugins'
     - '!README.md'
 
 functions:
   checkTask:
+    role: CheckTaskRole
     handler: src/checkTask.hadnler
+    environment:
+      SCORES_S3_NAME: !Ref ScoresBucket
 
-# you can add CloudFormation resource templates here
 resources:
   Resources:
+    # Student (Frontend) specific resources
+    Ec2ConnectPolicy:
+      Type: AWS::IAM::Policy
+      Properties:
+        PolicyName: WorkShopStudentUI
+        Groups:
+          - !Ref Colleagues
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "ec2:Describe*"
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - "ssm:StartSession"
+                - "ssm:DescribeInstanceInformation"
+                - "ssm:GetConnectionStatus"
+              Resource: "*" # Lower in the future
+            - Effect: Allow
+              Action:
+                - "cloudtrail:*"
+              Resource: "*" # Lower in the future
+            - Effect: Allow
+              Action:
+                - "lambda:InvokeFunction"
+              Resource:
+                - !GetAtt CheckTaskLambdaFunction.Arn
+
     Colleagues:
       Type: AWS::IAM::Group
       Properties:
@@ -47,6 +80,40 @@ resources:
           Password: "W1LL_be_OVERWRITTEN" # See workshopUsers.js
         Path: "/aws-workshop/"
         UserName: "example@example.com" # See workshopUsers.js
+
+    # Lambda specific resources
+    CheckTaskRole:
+      Type: 'AWS::IAM::Role'
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - 'sts:AssumeRole'
+        Path: "/aws-workshop/"
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        Policies:
+          - PolicyName: Scores
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                      - "s3:PutObject"
+                      - "s3:PutObjectAcl"
+                      - "s3:GetObject"
+                      - "s3:GetObjectAcl"
+                  Resource:
+                    - !GetAtt ScoresBucket.Arn
+                    - !Sub "arn:aws:s3:::${ScoresBucket}/*"
+
+    ScoresBucket:
+      Type: AWS::S3::Bucket
 
   Outputs:
     AccountId:
