@@ -217,6 +217,9 @@ class ServerlessPlugin {
             },
             "lambda": {
                 "checkTask": outputByKey.CheckTaskLambdaFunctionName
+            },
+            "storage": {
+                "scoresBucket": outputByKey.ScoresBucketName
             }
         }
         const fileContent = 'var Config = ' + JSON.stringify(config, null, 2);

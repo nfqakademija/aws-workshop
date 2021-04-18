@@ -62,6 +62,12 @@ resources:
                 - "lambda:InvokeFunction"
               Resource:
                 - !GetAtt CheckTaskLambdaFunction.Arn
+            - Effect: Allow
+              Action:
+                - "s3:ListBucket"
+              Resource:
+                - !GetAtt ScoresBucket.Arn
+                - !Sub "arn:aws:s3:::${ScoresBucket}/*"
 
     Colleagues:
       Type: AWS::IAM::Group
@@ -114,6 +120,20 @@ resources:
 
     ScoresBucket:
       Type: AWS::S3::Bucket
+      Properties:
+        CorsConfiguration: # Fro Browser API
+          CorsRules:
+            - AllowedHeaders:
+                - "*"
+              ExposedHeaders:
+                - "x-amz-meta-last-modified"
+              AllowedMethods:
+                - "GET"
+                - "PUT"
+                - "POST"
+              AllowedOrigins:
+                - "*"
+              MaxAge: "3000"
 
   Outputs:
     AccountId:
@@ -121,4 +141,7 @@ resources:
       Value: !Ref "AWS::AccountId"
     CheckTaskLambdaFunctionName:
       Description: Name to be used when invoking via SDK
-      Value: !Ref CheckTaskLambdaFunction # Name is generated from "functions" part of the file
+      Value: !Ref CheckTaskLambdaFunction
+    ScoresBucketName:
+      Description: Name of the bucket, where shores will be stored (and read from by UI)
+      Value: !Ref ScoresBucket

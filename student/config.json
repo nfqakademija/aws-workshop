@@ -9,5 +9,8 @@
     },
     "lambda": {
         "checkTask": "aws-workshop-CheckTaskLambda-ENQM9V50WEIP"
+    },
+    "storage": {
+        "scoresBucket": ""
     }
 }

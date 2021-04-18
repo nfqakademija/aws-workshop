@@ -75,8 +75,7 @@
 
     <div class="page">
         <h1>Your score</h1>
-        <score v-bind:scores="personalScore"></score>
-        Intermediate results may have delay of ~15 minutes
+        <score v-bind:username="aws.userName" v-bind:storage="storage.scoresBucket" v-bind:max="storage.maxScore"></score>
     </div>
 
     <div class="page">

@@ -12,13 +12,15 @@ var awsLogin = new Vue({
                 userName: Config.aws.userName,
                 password: Config.aws.password
             },
+            storage: {
+                scoresBucket: Config.storage.scoresBucket,
+                maxScore: 20
+            },
             personalScore: [],
         };
     },
     methods: {
         configureAws: function () {
-            //FIXME:
-            console.info("configureAws");
             AWS.config.setPromisesDependency(Promise);
             AWS.config.update({
                 region: this.region,
