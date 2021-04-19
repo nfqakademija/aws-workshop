@@ -123,7 +123,6 @@ See [docs for getting personalized credentials](student/README.md)
 - [ ] :hourglass: v0.8.0 Increase number of realistic examples
 - [ ] :hourglass: v0.9.0 Polishing UI/UX (nice to haves)
    - [ ] Replace `this.$parent` to Vue `$emit`
-   - [ ] Replace `this.setConfig` to Vue `$set`
    - [ ] Adding new student without regenerating password
    - [ ] Log invalid CheckTask inputs in CloudWatch
    - [ ] Lambda: List score S3 to Summary file

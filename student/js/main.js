@@ -35,6 +35,9 @@ var awsLogin = new Vue({
             name = name.replace(/[^a-z0-9-]/ig, '-').toLowerCase()
             return name + ".js";
         },
+        notSecure: function () {
+            return location.protocol !== 'https:' && location.protocol !== 'file:'
+        }
     },
     methods: {
         loadConfigKey: async function (e) {
@@ -49,20 +52,14 @@ var awsLogin = new Vue({
         },
         setConfig: function (newConfig) {
             // Do not understand how to properly use this.$set, so using old school way
-            console.log('OLDConfig', this.gameConfig);
-            console.log('newConfig', newConfig);
-
-            this.gameConfig.aws.region = newConfig.aws.region;
-            this.gameConfig.aws.accessKey = newConfig.aws.accessKey;
-            this.gameConfig.aws.secretKey = newConfig.aws.secretKey;
-            this.gameConfig.aws.accountId = newConfig.aws.accountId;
-            this.gameConfig.aws.userName = newConfig.aws.userName;
-            this.gameConfig.aws.password = newConfig.aws.password;
-            // this.gameConfig.lambda.checkTask = newConfig.lambda.checkTask;
-            // this.gameConfig.storage.scoresBucket = newConfig.storage.scoresBucket;
+            this.gameConfig = newConfig
         },
         loadConfig: async function() {
             this.loading = true;
+            if (this.notSecure) {
+                this.statusMessage = "Running on not secure connection. Will not expose passwords";
+                this.loading = false;
+            }
             let s = document.createElement("script");
             s.type = "text/javascript";
             s.src = "configs/" + this.configFile;

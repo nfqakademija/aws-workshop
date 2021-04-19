@@ -75,6 +75,31 @@ resources:
         Path: "/aws-workshop/"
         UserName: "example@example.com" # See workshopUsers.js
 
+    # Deployment of the Frontend application
+    AwsWorkshop:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: error.html
+
+    AwsWorkshopPolicy:
+      Type: 'AWS::S3::BucketPolicy'
+      Properties:
+        Bucket: !Ref AwsWorkshop
+        PolicyDocument:
+          Statement:
+            - Action:
+                - 's3:GetObject'
+              Effect: Allow
+              Resource: !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AwsWorkshop
+                  - '/*'
+              Principal: '*'
+
     # Lambda specific resources
     CheckTaskRole:
       Type: 'AWS::IAM::Role'
@@ -133,3 +158,8 @@ resources:
     ScoresBucketName:
       Description: Name of the bucket, where shores will be stored (and read from by UI)
       Value: !Ref ScoresBucket
+    AwsWorkshopBucketName:
+      Description: Entry point bucket name (where all Frontend assets will be deployed)
+      Value: !Ref AwsWorkshop
+    AwsWorkshopSecureUrl:
+      Value: !Sub "https://${AwsWorkshop.DomainName}/index.html"
