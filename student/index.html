@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xml:lang="en">
 <head>
     <meta charset="UTF-8" />
     <title>AWS workshop: Dive into the Cloud</title>
@@ -17,11 +17,37 @@
 <body>
 <div id="spa">
 
+    <div v-if="!gameConfig.aws.secretKey" class="modal-overlay" style="z-index: 1002; display: block; opacity: 0.5;"></div>
+
+    <div v-if="!gameConfig.aws.secretKey" id="modal1" class="modal open" tabindex="0" style="z-index: 1003; display: block; opacity: 1; top: 10%; transform: scaleX(1) scaleY(1);">
+        <form>
+            <div class="modal-content">
+                <h4>We need to identify you</h4>
+                <div class="input-field">
+                    <input v-model="initialization.userName" v-on:keyup="loadConfigKey" id="email" type="text" v-bind:class="{invalid: !initialization.valid}"/>
+                    <label for="email">E-mail address</label>
+                </div>
+                <div class="input-field">
+                    <input v-model="initialization.company" v-on:keyup="loadConfigKey" id="company" type="text"  v-bind:class="{invalid: !initialization.valid}"/>
+                    <label for="company">Company name</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <loading v-if="loading"></loading>
+                <span v-if="statusMessage">{{statusMessage}}</span>
+                <button v-on:click="loadConfig" v-bind:class="{disabled: !initialization.userName || !initialization.company || !initialization.valid}" class="btn waves-effect waves-light" type="button">
+                    Start learning <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+
     <div class="page page--full page--dive-into-the-cloud">
         <h1>Dive into the Cloud</h1>
     </div>
 
-    <div class="page">
+    <div class="page" v-if="gameConfig.aws.password">
         <div class="row">
             <form class="col s12 login-form">
                 <div class="row">
@@ -29,22 +55,22 @@
                         <h2>Logins</h2>
                         <h3>For you</h3>
                         <div>
-                            <input v-model="aws.accountId" placeholder="User name" id="account_id" type="text" class="validate"/>
                             <label for="account_id">Account ID (12 digits) or account alias</label>
+                            <input v-model="gameConfig.aws.accountId" id="account_id" type="text" class="validate"/>
                         </div>
                         <div>
-                            <input v-model="aws.userName" placeholder="User name" id="user_name" type="text" class="validate"/>
                             <label for="user_name">IAM user name</label>
+                            <input v-model="gameConfig.aws.userName" id="user_name" type="text" class="validate"/>
                         </div>
                         <div>
-                            <input v-model="aws.password" id="password" v-bind:type="showPasswords ? 'text' : 'password'" class="validate"/>
                             <label for="password">Password</label>
+                            <input v-model="gameConfig.aws.password" id="password" v-bind:type="showPasswords ? 'text' : 'password'" class="validate"/>
                         </div>
                         <div class="login-form__submit-area">
                             <button v-on:click="showPasswords = !showPasswords" class="btn waves-effect waves-light" type="button">Show passwords
-                                <i class="material-icons right" title="show passwords">visibility</i>
+                                <i class="material-icons right" title="show password">visibility</i>
                             </button>
-                            <a v-bind:href="'https://'+aws.accountId+'.signin.aws.amazon.com/console/'" target="_blank" class="btn waves-effect waves-light" type="button">
+                            <a v-bind:href="'https://'+gameConfig.aws.accountId+'.signin.aws.amazon.com/console/'" target="_blank" class="btn waves-effect waves-light" type="button">
                                 Go to AWS Console <i class="material-icons right">send</i>
                             </a>
                         </div>
@@ -53,109 +79,12 @@
                         <img src="img/aws-illustration.jpg" width="345" height="514" alt="Illustration of AWS Login form"/>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="input-field col s6">
-                        <h3>For the WebSite</h3>
-                        <div>
-                            <input v-model="accessKey" placeholder="Access key id" id="access_key" type="text" class="validate"/>
-                            <label for="access_key">Access key</label>
-                        </div>
-                        <div>
-                            <input v-model="secretKey" id="secret_key" type="password" class="validate"/>
-                            <label for="secret_key">Secret key</label>
-                        </div>
-                        <div class="login-form__submit-area">
-                            <button v-on:click="login" class="btn waves-effect waves-light" type="button">Test logins
-                                <i class="material-icons right">send</i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="input-field col s6">
-                        <img v-if="!loading && statusMessage === ''" src="img/scores-illustration.jpg" width="495" height="383" alt="Scores illustration during the game"/>
-                        <div v-if="loading" class="preloader-wrapper small active">
-                            <div class="spinner-layer spinner-blue-only">
-                                <div class="circle-clipper left">
-                                    <div class="circle"></div>
-                                </div><div class="gap-patch">
-                                <div class="circle"></div>
-                            </div><div class="circle-clipper right">
-                                <div class="circle"></div>
-                            </div>
-                            </div>
-                        </div>
-                        <div v-if="statusMessage !== ''" class="collection z-depth-2 status--preformatted">{{ statusMessage }}</div>
-                    </div>
-                </div>
             </form>
-        </div>
-    </div>
-
-    <div class="page" v-if="secretKey">
-        <h1>Your score</h1>
-        <score v-bind:username="aws.userName" v-bind:storage="storage.scoresBucket" v-bind:max="storage.maxScore"></score>
-    </div>
-
-    <div class="page" v-if="secretKey">
-        <h1>Score board</h1>
-        <score v-bind:storage="storage.scoresBucket" v-bind:max="storage.maxScore" v-bind:players="students"></score>
-    </div>
-
-    <div class="page" v-if="secretKey">
-        <h3>Before we start learning...</h3>
-        
-        <question v-bind:player="aws.userName" task="0.1.SystemTest" value="yes">
-            Are you in?
-        </question>
-    </div>
-
-    <div class="page page--full page--on-the-ground" v-if="secretKey">
-        <h1>Let's start from the ground</h1>
-    </div>
-
-    <div class="page" v-if="secretKey">
-        <h3>Getting familiar with AWS</h3>
-        Choose your path:
-        <a class="waves-effect waves-light btn-small">Easy</a>
-        <a class="waves-effect waves-light btn-small">Medium</a>
-        <a class="waves-effect waves-light btn-small">Hard</a>
-
-        <div class="col s12 m7">
-            <h4 class="header">Where are my engine?</h4>
-            <div class="card horizontal">
-                <div class="card-stacked">
-                    <div class="card-content">
-                        Sigitas have created some country-bee service on AWS, but now <strong>he is on holiday</strong>.<br/>
-                        It turned out there was <strong>bad value</strong> <code>sha1</code> instead of <code>argon2</code>
-                        in <code>parameters.yml</code> <strong>file</strong>.<br/>
-                        News is already spreading on Facebook and Reddit.<br/>
-                        You do not have SSH key, but you <strong>have access to AWS</strong>.<br/>
-                        It is now or never.
-                    </div>
-                    <div class="card-action">
-                        <a href="https://327920853133.signin.aws.amazon.com/console/" target="_blank">Connect to AWS Console (Web system)</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="collection">
-            <a href="#" class="collection-item">Use same credentials you got via e-mail/Slack<span class="badge">Hint</span></a>
-            <a href="#" class="waves-effect waves-light btn-small">need a hint</a>
-            <a href="#" class="waves-effect waves-light btn-small">need a hint</a>
-            <a href="#" class="waves-effect waves-light btn-small">need a hint</a>
-        </div>
-
-        <div class="collection">
-            <a href="https://aws.amazon.com/ec2/" class="collection-item">Virtual machines on AWS<span class="badge">Docs</span></a>
-            <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html" class="collection-item">Connect to instance via SSM agent<span class="badge">Docs</span></a>
-            <a href="https://aws.amazon.com/console/" class="collection-item">What is AWS Console<span class="badge">Docs</span></a>
         </div>
     </div>
 </div>
 
-    <script type="text/javascript" src="config.local.js"></script>
-    <script type="text/javascript" src="js/score.js"></script>
-    <script type="text/javascript" src="js/question.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

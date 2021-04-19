@@ -226,7 +226,7 @@ class ServerlessPlugin {
         const fileContent = 'var Config = ' + JSON.stringify(config, null, 2);
 
         // Storing configuration to the file system
-        const studentConfigFile = "../student/config.local.js"
+        const studentConfigFile = "../student/a-a.js"
         this.log(`Storing Frontend config to ${studentConfigFile}...`);
         await this.serverless.utils.writeFile(studentConfigFile, fileContent)
     }

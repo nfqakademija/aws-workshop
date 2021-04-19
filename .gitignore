@@ -14,7 +14,7 @@ ehthumbs.db
 Thumbs.db
 
 # App generated files
-student/config.local.js
+student/configs/a-a.js
 teacher/config/students.local.yml
 teacher/config/students.passwords.cache.json
 
@@ -24,6 +24,10 @@ student/spacex-theme
 
 # Temporary while developing learning material
 student/examples
+
+# Credentials
+student/configs/*.js
+!student/configs/one-example-example-com.js
 
 # Serverless/Node.js generated files
 node_modules

@@ -23,7 +23,7 @@ sls deploy
 ```
 > Will create `aws-workshop-dev` CloudFormation stack
 
-* Use generated `config.local.js` as an example:
+* Use generated `a-a.js` as an example:
 Open [Web page](../student/index.html) via browser as a Student
 
 
