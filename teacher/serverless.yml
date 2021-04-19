@@ -45,20 +45,6 @@ resources:
           Statement:
             - Effect: Allow
               Action:
-                - "ec2:Describe*"
-              Resource: "*"
-            - Effect: Allow
-              Action:
-                - "ssm:StartSession"
-                - "ssm:DescribeInstanceInformation"
-                - "ssm:GetConnectionStatus"
-              Resource: "*" # Lower in the future
-            - Effect: Allow
-              Action:
-                - "cloudtrail:*"
-              Resource: "*" # Lower in the future
-            - Effect: Allow
-              Action:
                 - "lambda:InvokeFunction"
               Resource:
                 - !GetAtt CheckTaskLambdaFunction.Arn
@@ -74,6 +60,8 @@ resources:
       Properties:
         GroupName: "AwsWorkshopParticipants"
         Path: "/aws-workshop/"
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/ReadOnlyAccess
 
     Colleague:
       Type: AWS::IAM::User

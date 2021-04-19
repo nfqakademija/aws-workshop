@@ -101,8 +101,8 @@ See [docs for getting personalized credentials](student/README.md)
 - [ ] :hourglass: v0.1.0 Tool just to create AWS logins
    - [x] Cleanup PoC code
    - [ ] Store Frontend on S3
-   - [ ] Credentials from e-mail
-   - [ ] Limit IAM access
+   - [x] Credentials from e-mail
+   - [x] Limit IAM access (can read credentials, but will not accidentally purchase/change something big)
 - [ ] :hourglass: v0.2.0 Tool code to illustrate AWS concepts (concepts explain verbally)
    - [ ] Put some text (topics) to guide the speaking  
 - [ ] :hourglass: v0.3.0 Single realistic example and references in the code
