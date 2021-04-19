@@ -30,6 +30,7 @@ var awsLogin = new Vue({
     },
     computed: {
         configFile: function () {
+            // Should be aligned with same logic in workshopUsers.js
             let name = this.initialization.company + '-' + this.initialization.userName;
             name = name.replace(/[^a-z0-9-]/ig, '-').toLowerCase()
             return name + ".js";

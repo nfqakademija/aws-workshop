@@ -68,13 +68,13 @@ class ServerlessPlugin {
         return this.passwordsCache;
     }
 
-    async studentsFile() {
+    studentsFile() {
         const studentsFile = 'config/students.local.yml';
         if (!this.serverless.utils.fileExistsSync(studentsFile)) {
             this.warn(`Please use "config/students.local.yml" instead of "${studentsFile}" to have local list`);
             return 'config/students.yml';
         }
-        return 'config/students.local.yml';
+        return studentsFile;
     }
 
     async students(studentsFile) {
@@ -85,6 +85,25 @@ class ServerlessPlugin {
         this.log(`Reading ${studentsFile}...`);
         this.studentsCache = await this.serverless.yamlParser.parse(studentsFile)
         return this.studentsCache;
+    }
+
+    companiesFile() {
+        const companiesFile = 'config/companies.local.yml';
+        if (!this.serverless.utils.fileExistsSync(companiesFile)) {
+            this.warn(`Please use "config/companies.local.yml" instead of "${companiesFile}" to have local list`);
+            return 'config/companies.yml';
+        }
+        return companiesFile;
+    }
+
+    async companies(companiesFile) {
+        if (this.companiesCache !== undefined) {
+            return this.companiesCache;
+        }
+
+        this.log(`Reading ${companiesFile}...`);
+        this.companiesCache = await this.serverless.yamlParser.parse(companiesFile)
+        return this.companiesCache;
     }
 
     // Main hook logic
@@ -199,6 +218,7 @@ class ServerlessPlugin {
         const info = await this.describeStack(this.stackName);
         const studentsFile = await this.studentsFile();
         const students = await this.students(studentsFile);
+        const companies = await this.companies(this.companiesFile())
         const passwords = await this.passwords(students.length);
         let outputByKey = {};
         for (const output of info.Stacks[0].Outputs) {
@@ -206,29 +226,32 @@ class ServerlessPlugin {
         }
 
         // Generating Frontend compatible configuration file
-        const config = {
-            "aws": {
-                "region": this.serverless.getProvider('aws').getRegion(),
-                "accessKey": outputByKey.Colleague1AccessKeyId,
-                "secretKey": outputByKey.Colleague1SecretKey,
-                "accountId": outputByKey.AccountId,
-                "userName": students[0],
-                "password": passwords[0],
-            },
-            "lambda": {
-                "checkTask": outputByKey.CheckTaskLambdaFunctionName
-            },
-            "storage": {
-                "scoresBucket": outputByKey.ScoresBucketName
-            },
-            "students": students
-        }
-        const fileContent = 'var Config = ' + JSON.stringify(config, null, 2);
+        for (const i in students) {
+            const config = {
+                "aws": {
+                    "region": this.serverless.getProvider('aws').getRegion(),
+                    "accessKey": outputByKey.Colleague1AccessKeyId,
+                    "secretKey": outputByKey.Colleague1SecretKey,
+                    "accountId": outputByKey.AccountId,
+                    "userName": students[i],
+                    "password": passwords[i],
+                },
+                "lambda": {
+                    "checkTask": outputByKey.CheckTaskLambdaFunctionName
+                },
+                "storage": {
+                    "scoresBucket": outputByKey.ScoresBucketName
+                }
+            }
+            const fileContent = 'var Config = ' + JSON.stringify(config, null, 2);
 
-        // Storing configuration to the file system
-        const studentConfigFile = "../student/a-a.js"
-        this.log(`Storing Frontend config to ${studentConfigFile}...`);
-        await this.serverless.utils.writeFile(studentConfigFile, fileContent)
+            // Storing configuration to the file system
+            
+            const fileName = `${companies[i]}-${students[i]}`.replace(/[^a-z0-9-]/ig, '-').toLowerCase()
+            const participantConfigFile = `../student/configs/${fileName}.js`
+            this.log(`Storing Frontend config to ${participantConfigFile}...`);
+            await this.serverless.utils.writeFile(participantConfigFile, fileContent)
+        }
     }
 }
 

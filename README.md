@@ -127,6 +127,8 @@ See [docs for getting personalized credentials](student/README.md)
    - [ ] Adding new student without regenerating password
    - [ ] Log invalid CheckTask inputs in CloudWatch
    - [ ] Lambda: List score S3 to Summary file
+   - [ ] Better way to authenticate participants
+   - [ ] Error checks for array out of index access 
 - [ ] :hourglass: v0.10.0 More content
 
 

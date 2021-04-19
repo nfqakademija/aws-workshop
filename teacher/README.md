@@ -15,6 +15,7 @@ sudo npm install -g serverless@v2.35.0
 * Please update students lists in `students.local.yml`:
 ```shell
 cp config/students.yml config/students.local.yml
+cp config/companies.yml config/compnay.local.yml
 ```
 
 * Deploy infrastructure

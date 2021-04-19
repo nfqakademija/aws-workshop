@@ -1,0 +1,10 @@
+# Use YAML array to specify company name of each participant
+# Those will be used with workshopUsers.js and Serverless::Plugin::WorkshopUsers": "duplicate-with-user-and-password"
+# Copy to company..local.yml to separate generic code and local configuration
+
+- ONE
+
+# Other examples:
+# - SpaceX
+# - justRegularString
+# - anything-that-alphanumeric-or-with-hyphens
