@@ -97,12 +97,13 @@ See [docs for getting personalized credentials](student/README.md)
       - [x] Vue.js
       - [x] Check score on frontend
       - [x] Frontend: Read scores of all (teacher would use user's flow)
-   
 - [ ] :hourglass: v0.1.0 Tool just to create AWS logins
    - [x] Cleanup PoC code
-   - [ ] Store Frontend on S3
+   - [x] Store Frontend on S3
    - [x] Credentials from e-mail
    - [x] Limit IAM access (can read credentials, but will not accidentally purchase/change something big)
+   - [ ] Image upload issues (Byte stream?)
+   - [ ] ListObject security leak
 - [ ] :hourglass: v0.2.0 Tool code to illustrate AWS concepts (concepts explain verbally)
    - [ ] Put some text (topics) to guide the speaking  
 - [ ] :hourglass: v0.3.0 Single realistic example and references in the code

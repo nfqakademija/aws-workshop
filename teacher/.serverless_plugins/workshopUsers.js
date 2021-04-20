@@ -213,19 +213,28 @@ class ServerlessPlugin {
     }
 
     async afterDeploy() {
-        // Retrieve context for Student Frontend
+        const outputByKey = await this.getOutputFromStack();
+        await this.storeContextToConfiguration(outputByKey);
+        await this.uploadAssets(outputByKey.AwsWorkshopBucketName);
+        await this.printFinalUrl(outputByKey.AwsWorkshopSecureUrl);
+    }
+
+    async getOutputFromStack() {
         this.log('Reading output of the stack...');
         const info = await this.describeStack(this.stackName);
-        const studentsFile = await this.studentsFile();
-        const students = await this.students(studentsFile);
-        const companies = await this.companies(this.companiesFile())
-        const passwords = await this.passwords(students.length);
         let outputByKey = {};
         for (const output of info.Stacks[0].Outputs) {
             outputByKey[output.OutputKey] = output.OutputValue;
         }
+        return outputByKey
+    }
 
+    async storeContextToConfiguration(outputByKey) {
         // Generating Frontend compatible configuration file
+        const studentsFile = await this.studentsFile();
+        const students = await this.students(studentsFile);
+        const companies = await this.companies(this.companiesFile())
+        const passwords = await this.passwords(students.length);
         for (const i in students) {
             const config = {
                 "aws": {
@@ -246,12 +255,70 @@ class ServerlessPlugin {
             const fileContent = 'var Config = ' + JSON.stringify(config, null, 2);
 
             // Storing configuration to the file system
-            
             const fileName = `${companies[i]}-${students[i]}`.replace(/[^a-z0-9-]/ig, '-').toLowerCase()
             const participantConfigFile = `../student/configs/${fileName}.js`
             this.log(`Storing Frontend config to ${participantConfigFile}...`);
             await this.serverless.utils.writeFile(participantConfigFile, fileContent)
         }
+    }
+
+    mimeType(extension) {
+        switch (extension) {
+            case 'htm':
+            case 'html':
+                return 'text/html; charset=UTF-8';
+            case 'txt':
+                return 'text/plain; charset=UTF-8'
+            case 'js':
+                return 'text/javascript; charset=UTF-8';
+            case 'json':
+                return 'application/json; charset=UTF-8';
+            case 'css':
+                return 'text/css; charset=UTF-8'
+            case 'jpg':
+            case 'jepg':
+                return 'image/jpeg'
+            case 'png':
+                return 'image/png'
+            case 'zip':
+                return 'application/zip'
+            default:
+                return undefined;
+        }
+    }
+
+    async uploadAssets(assetsBucket) {
+        const assetPath = '../student';
+        this.log(`Uploading assets "${assetPath}" to "${assetsBucket}"...`)
+        let uploading = this.serverless.utils.walkDirSync(assetPath).
+            filter(f => !f.includes('/.git/') && !f.includes('README.md'))
+            .map(f => {
+                const parts = f.split('.');
+                const extension = parts[parts.length-1].toLowerCase();
+                const key = f.replace(assetPath + '/', '');
+                return {LocalFile: f, Key: key, ContentType: this.mimeType(extension)};
+            }).
+            map(data => {
+                const body = this.serverless.utils.readFileSync(data.LocalFile);
+                this.log(`Uploading: ${data.Key}`);
+                return this.serverless.getProvider('aws').request(
+                    'S3',
+                    'upload', {
+                        Bucket: assetsBucket,
+                        Key: data.Key,
+                        Body: body,
+                        ContentType: data.ContentType
+                    },
+                    this.serverless.getProvider('aws').getStage(),
+                    this.serverless.getProvider('aws').getRegion()
+                );
+            });
+        const uploaded = await Promise.all(uploading);
+        this.log(`Has uploaded ${uploaded.length} files`)
+    }
+
+    async printFinalUrl(url) {
+        this.log(`Workshop URL: ${url}`)
     }
 }
 

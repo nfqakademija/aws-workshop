@@ -23,9 +23,6 @@ teacher/config/companies.local.yml
 # See https://gist.github.com/aurelijusb/2b53a0765d71af492e73e9533ac6fef7
 student/spacex-theme
 
-# Temporary while developing learning material
-student/examples
-
 # Credentials
 student/configs/*.js
 !student/configs/one-example-example-com.js

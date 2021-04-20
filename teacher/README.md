@@ -8,7 +8,7 @@ Ideally it whole setup should be automated as much as possible
 
 * Install dependencies: [Serverless](https://www.serverless.com/framework/docs/getting-started/)
 ```shell
-sudo npm install -g serverless@v2.35.0
+sudo npm install -g serverless@v2.37.0
 ```
 > `sls --version` should print `Framework Core: 2.35.0` 
 
@@ -54,3 +54,4 @@ sls package
 * https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html
 * https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
 * https://serverlesscode.com/post/customizing-serverless-with-plugins/
+* https://github.com/DonBrinn/serverless-plugin-upload-s3
