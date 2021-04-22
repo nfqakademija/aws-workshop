@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+
 const PluginName = 'workshopUsers'
 const PluginMetaKey = 'Serverless::Plugin::WorkshopUsers'
 
@@ -299,7 +301,7 @@ class ServerlessPlugin {
                 return {LocalFile: f, Key: key, ContentType: this.mimeType(extension)};
             }).
             map(data => {
-                const body = this.serverless.utils.readFileSync(data.LocalFile);
+                const body = fs.createReadStream(data.LocalFile);
                 this.log(`Uploading: ${data.Key}`);
                 return this.serverless.getProvider('aws').request(
                     'S3',

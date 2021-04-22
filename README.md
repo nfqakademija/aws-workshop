@@ -102,7 +102,7 @@ See [docs for getting personalized credentials](student/README.md)
    - [x] Store Frontend on S3
    - [x] Credentials from e-mail
    - [x] Limit IAM access (can read credentials, but will not accidentally purchase/change something big)
-   - [ ] Image upload issues (Byte stream?)
+   - [x] Image upload issues (Byte stream?)
    - [ ] ListObject security leak
 - [ ] :hourglass: v0.2.0 Tool code to illustrate AWS concepts (concepts explain verbally)
    - [ ] Put some text (topics) to guide the speaking  
