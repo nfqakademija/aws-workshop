@@ -251,8 +251,10 @@ class ServerlessPlugin {
                     "checkTask": outputByKey.CheckTaskLambdaFunctionName
                 },
                 "storage": {
-                    "scoresBucket": outputByKey.ScoresBucketName
-                }
+                    "scoresBucket": outputByKey.ScoresBucketName,
+                    "maxScore": 20,
+                },
+                "students": students
             }
             const fileContent = 'var Config = ' + JSON.stringify(config, null, 2);
 

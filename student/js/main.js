@@ -44,7 +44,9 @@ var awsLogin = new Vue({
                 },
                 storage: {
                     scoresBucket: "",
-                }
+                    maxScore: 20
+                },
+                students: []
             },
             sts: {
                 statusMessage: "",
@@ -113,7 +115,7 @@ var awsLogin = new Vue({
         configureAws: function () {
             AWS.config.setPromisesDependency(Promise);
             AWS.config.update({
-                region: this.region,
+                region: this.gameConfig.aws.region,
                 credentials: new AWS.Credentials({
                     accessKeyId: this.gameConfig.aws.accessKey.trim(),
                     secretAccessKey: this.gameConfig.aws.secretKey.trim(),

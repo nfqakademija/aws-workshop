@@ -11,6 +11,8 @@ var Config = {
     "checkTask": "EXAMPLE-NAME"
   },
   "storage": {
-    "scoresBucket": "EXAMPLE-NAME"
-  }
+    "scoresBucket": "EXAMPLE-NAME",
+    "maxScore": 20,
+  },
+  "students": ["example@example.com"]
 }
