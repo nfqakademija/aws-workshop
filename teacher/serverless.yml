@@ -147,6 +147,232 @@ resources:
                 - "*"
               MaxAge: "3000"
 
+    #
+    # Resources for the tasks
+    #
+
+    # Networking
+    Vpc:
+      Type: AWS::EC2::VPC
+      Properties:
+        CidrBlock: 10.0.0.0/16
+        Tags:
+          - Key: Name
+            Value: VirtualNetwork
+
+    InternetGateway:
+      Type: AWS::EC2::InternetGateway
+      Properties:
+        Tags:
+          - Key: Name
+            Value: Internet Gateway
+
+    VpcToInternetGateway:
+      Type: AWS::EC2::VPCGatewayAttachment
+      Properties:
+        VpcId:
+          Ref: Vpc
+        InternetGatewayId:
+          Ref: InternetGateway
+
+    # Public subnet 1 (with routes, NAT and IGW)
+    PublicSubnet1:
+      Type: AWS::EC2::Subnet
+      Properties:
+        CidrBlock: 10.0.0.0/18
+        VpcId:
+          Ref: Vpc
+        MapPublicIpOnLaunch: true
+        Tags:
+          - Key: Name
+            Value: PublicSubnet 1
+
+    PublicSubnet1RouteTable:
+      Type: AWS::EC2::RouteTable
+      Properties:
+        VpcId:
+          Ref: Vpc
+        Tags:
+          - Key: Name
+            Value: PublicSubnet1 RouteTable
+
+    PublicSubnet1RouteTableAssociation:
+      Type: AWS::EC2::SubnetRouteTableAssociation
+      Properties:
+        RouteTableId:
+          Ref: PublicSubnet1RouteTable
+        SubnetId:
+          Ref: PublicSubnet1
+
+    PublicSubnet1DefaultRoute:
+      Type: AWS::EC2::Route
+      Properties:
+        RouteTableId:
+          Ref: PublicSubnet1RouteTable
+        DestinationCidrBlock: 0.0.0.0/0
+        GatewayId:
+          Ref: InternetGateway
+      DependsOn:
+        - Vpc
+
+    PublicSubnet1NatIp:
+      Type: AWS::EC2::EIP
+      Properties:
+        Domain: vpc
+        Tags:
+          - Key: Name
+            Value: NatGatewey1 IP
+
+    NatGateway1:
+      Type: AWS::EC2::NatGateway
+      Properties:
+        AllocationId:
+          Fn::GetAtt:
+            - PublicSubnet1NatIp
+            - AllocationId
+        SubnetId:
+          Ref: PublicSubnet1
+        Tags:
+          - Key: Name
+            Value: Nat Gateway
+
+    # Public subnet 1 (with routes, NAT and IGW)
+    PublicSubnet2:
+      Type: AWS::EC2::Subnet
+      Properties:
+        CidrBlock: 10.0.64.0/18
+        VpcId:
+          Ref: Vpc
+        MapPublicIpOnLaunch: true
+        Tags:
+          - Key: Name
+            Value: PublicSubnet2
+
+    PublicSubnet2RouteTable:
+      Type: AWS::EC2::RouteTable
+      Properties:
+        VpcId:
+          Ref: Vpc
+        Tags:
+          - Key: Name
+            Value: PublicSubnet2 RouteTable
+
+    PublicSubnet2RouteTableAssociation:
+      Type: AWS::EC2::SubnetRouteTableAssociation
+      Properties:
+        RouteTableId:
+          Ref: PublicSubnet2RouteTable
+        SubnetId:
+          Ref: PublicSubnet2
+
+    PublicSubnet2RouteTableDefaultRoute:
+      Type: AWS::EC2::Route
+      Properties:
+        RouteTableId:
+          Ref: PublicSubnet2RouteTable
+        DestinationCidrBlock: 0.0.0.0/0
+        GatewayId:
+          Ref: InternetGateway
+      DependsOn:
+        - Vpc
+
+    PublicSubnet2NatIp:
+      Type: AWS::EC2::EIP
+      Properties:
+        Domain: vpc
+        Tags:
+          - Key: Name
+            Value: NatGatewey2 IP
+
+    NatGateway2:
+      Type: AWS::EC2::NatGateway
+      Properties:
+        AllocationId:
+          Fn::GetAtt:
+            - PublicSubnet2NatIp
+            - AllocationId
+        SubnetId:
+          Ref: PublicSubnet2
+        Tags:
+          - Key: Name
+            Value: NatGateway
+
+    # Private subnet 1 (with routes to NAT gateway)
+    PrivateSubnet1:
+      Type: AWS::EC2::Subnet
+      Properties:
+        CidrBlock: 10.0.128.0/18
+        VpcId:
+          Ref: Vpc
+        MapPublicIpOnLaunch: false
+        Tags:
+          - Key: Name
+            Value: PrivateSubnet1
+
+    PrivateSubnet1RouteTable:
+      Type: AWS::EC2::RouteTable
+      Properties:
+        VpcId:
+          Ref: Vpc
+        Tags:
+          - Key: Name
+            Value: PrivateSubnet1 RouteTable
+
+    PrivateSubnet1RouteTableAssociation:
+      Type: AWS::EC2::SubnetRouteTableAssociation
+      Properties:
+        RouteTableId:
+          Ref: PrivateSubnet1RouteTable
+        SubnetId:
+          Ref: PrivateSubnet1
+
+    PrivateSubnet1DefaultRoute:
+      Type: AWS::EC2::Route
+      Properties:
+        RouteTableId:
+          Ref: PrivateSubnet1RouteTable
+        DestinationCidrBlock: 0.0.0.0/0
+        NatGatewayId:
+          Ref: NatGateway1
+
+    # Private subnet 2 (with routes to NAT gateway)
+    PrivateSubnet2:
+      Type: AWS::EC2::Subnet
+      Properties:
+        CidrBlock: 10.0.192.0/18
+        VpcId:
+          Ref: Vpc
+        MapPublicIpOnLaunch: false
+        Tags:
+          - Key: Name
+            Value: PrivateSubnet2
+
+    PrivateSubnet2RouteTable:
+      Type: AWS::EC2::RouteTable
+      Properties:
+        VpcId:
+          Ref: Vpc
+        Tags:
+          - Key: Name
+            Value: PrivateSubnet2 RouteTable
+
+    PrivateSubnet2RouteTableAssociation:
+      Type: AWS::EC2::SubnetRouteTableAssociation
+      Properties:
+        RouteTableId:
+          Ref: PrivateSubnet2RouteTable
+        SubnetId:
+          Ref: PrivateSubnet2
+
+    PrivateSubnet2DefaultRoute:
+      Type: AWS::EC2::Route
+      Properties:
+        RouteTableId:
+          Ref: PrivateSubnet2RouteTable
+        DestinationCidrBlock: 0.0.0.0/0
+        NatGatewayId:
+          Ref: NatGateway2
+
   Outputs:
     AccountId:
       Description: AWS Account number, where all tasks should be executed on

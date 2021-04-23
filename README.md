@@ -110,6 +110,8 @@ See [docs for getting personalized credentials](student/README.md)
    - [x] Remember User login in the browser (not reentering after browser refresh)
    - [ ] Put some text (topics) to guide the speaking (feels not natural, skipping)  
 - [ ] :hourglass: v0.3.0 Single realistic example and references in the code
+   - [x] VPC example
+   - [ ] Cost optimization while in development
    - [ ] Creation of EC2
    - [ ] Automating per user nginx/parameters creation
    - [ ] Automating check of response (before and after)
@@ -133,7 +135,7 @@ See [docs for getting personalized credentials](student/README.md)
    - [ ] Better way to authenticate participants
    - [ ] Error checks for array out of index access 
    - [ ] Better stack cleanup (remove from S3)
-   
+   - [ ] Split serverless.yml (required additional plugins)
 - [ ] :hourglass: v0.10.0 More content
 
 

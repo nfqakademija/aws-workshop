@@ -180,7 +180,7 @@ Vue.component('score', {
             }
             const filler = {
                 passed: false,
-                name: 'future tasks'
+                name: 'future task-resources'
             }
 
             return fillObjects(result, filler, this.max);

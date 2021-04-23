@@ -84,3 +84,5 @@ sls remove
 * https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml/
 * https://serverlesscode.com/post/customizing-serverless-with-plugins/
 * https://github.com/DonBrinn/serverless-plugin-upload-s3
+* https://docs.aws.amazon.com/cdk/api/latest/docs/aws-ecs-patterns-readme.html
+* https://app.diagrams.net/
