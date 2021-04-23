@@ -76,7 +76,7 @@ sls remove
 
  * Delay of CloudTrail is [~15 min](https://aws.amazon.com/cloudtrail/faqs/),
    so not suitable for real time game/monitoring
-
+ * Spot instance limits for new AWS accounts: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html
 
 ## References
 

@@ -112,10 +112,11 @@ See [docs for getting personalized credentials](student/README.md)
 - [ ] :hourglass: v0.3.0 Single realistic example and references in the code
    - [x] VPC example
    - [x] Cost optimization while in development
-   - [ ] Creation of EC2
+   - [x] Creation of EC2
    - [ ] Automating per user nginx/parameters creation
    - [ ] Automating check of response (before and after)
    - [ ] Docs for beginners and experts
+   - [ ] :x: Spot instance quotas for new AWS accounts
 - [ ] :hourglass: v0.4.0 Gamification via Lambda based quizzes
    - [ ] Steps to EC2
 - [ ] :hourglass: v0.5.0 Multiple realistic examples

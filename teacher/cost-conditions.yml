@@ -2,7 +2,27 @@
 # so testing of the tool (and learning materials)
 # could be both a good example and not paying for what you do not use
 
-# Networking task (NATs cost the most)
+# Networking task (NATs and instances cost the most)
 createVpc: true
 twoSubnets: false
 privateSubnets: false
+ec2Tempalte: true
+ec2Asg: true
+
+ec2Subments: # it was coo complex to automate by variables: twoSubnets+privateSubnets
+  - !Ref PublicSubnet1
+#ec2Subments: # example when twoSubnets+privateSubnets
+#  - !Ref PrivateSubnet1
+#  - !Ref PrivateSubnet1
+
+instanceType: "t4g.nano"
+#instanceMarketOptions: !Ref AWS::NoValue # Use On-demand instances
+instanceMarketOptions: #example of using Spat instance (if quota increase is already requested)
+  MarketType: spot
+  SpotOptions:
+    MaxPrice: 0.0015
+    SpotInstanceType: "one-time"
+
+asgMin: 1
+asgMax: 2
+asgDesired: 1

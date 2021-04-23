@@ -44,7 +44,13 @@ resources:
       - !Equals ["${file(./cost-conditions.yml):createVpc, 'true'}", true]
       - !Equals ["${file(./cost-conditions.yml):twoSubnets, 'true'}", true]
       - !Equals ["${file(./cost-conditions.yml):privateSubnets, 'true'}", true]
-
+    NeedEc2Template: !And
+      - !Equals ["${file(./cost-conditions.yml):createVpc, 'true'}", true]
+      - !Equals ["${file(./cost-conditions.yml):ec2Template, 'true'}", true]
+    NeedEc2Asg: !And
+      - !Equals ["${file(./cost-conditions.yml):createVpc, 'true'}", true]
+      - !Equals ["${file(./cost-conditions.yml):ec2Template, 'true'}", true]
+      - !Equals ["${file(./cost-conditions.yml):ec2Asg, 'true'}", true]
 
   Resources:
     # Student (Frontend) specific resources
@@ -409,6 +415,82 @@ resources:
         DestinationCidrBlock: 0.0.0.0/0
         NatGatewayId:
           Ref: NatGateway2
+
+    # EC2 instance template (cheaper resources used to describe)
+    InstanceSecurityGroup:
+      Condition: NeedEc2Template
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: "Firewall for my instance"
+        VpcId: !Ref Vpc
+
+    InstanceRole:
+      Condition: NeedEc2Template
+      Type: AWS::IAM::Role
+      Properties:
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Service:
+                  - "ec2.amazonaws.com"
+              Action:
+                - "sts:AssumeRole"
+
+    InstanceProfile:
+      Condition: NeedEc2Template
+      Type: AWS::IAM::InstanceProfile
+      Properties:
+        Roles:
+          - !Ref InstanceRole
+
+    LaunchTemplateConfig:
+      Condition: NeedEc2Template
+      Type: AWS::EC2::LaunchTemplate
+      Properties:
+        LaunchTemplateData:
+          ImageId: ami-00552336fb4b81164 # Amazon Linux 2 AMI  (64-bit Arm)
+          SecurityGroupIds:
+            - !Ref InstanceSecurityGroup
+          TagSpecifications:
+            - ResourceType: instance
+              Tags:
+                - Key: StackName
+                  Value: !Ref 'AWS::StackName'
+                - Key: Name
+                  Value: "spaceship-production"
+            - ResourceType: volume
+              Tags:
+                - Key: StackName
+                  Value: !Ref 'AWS::StackName'
+          InstanceType: ${file(./cost-conditions.yml):instanceType}
+          InstanceMarketOptions: ${file(./cost-conditions.yml):instanceMarketOptions}
+          IamInstanceProfile:
+            Name: !Ref InstanceProfile
+          UserData:
+            'Fn::Base64':
+              'Fn::Sub': |
+                #!/bin/bash
+                yum update -y
+                yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+
+    # Runnable instances
+    AutoScalingGroup:
+      Condition: NeedEc2Asg
+      Type: AWS::AutoScaling::AutoScalingGroup
+      Properties:
+        AutoScalingGroupName: My production instances
+        MinSize: ${file(./cost-conditions.yml):asgMin}
+        MaxSize: ${file(./cost-conditions.yml):asgMax}
+        DesiredCapacity: ${file(./cost-conditions.yml):asgDesired}
+        HealthCheckGracePeriod: 10 # Assuming instance status fast or checking Hardware, not software health
+        LaunchTemplate:
+          LaunchTemplateId: !Ref LaunchTemplateConfig
+          Version: !GetAtt LaunchTemplateConfig.LatestVersionNumber
+        VPCZoneIdentifier: ${file(./cost-conditions.yml):ec2Subments}
 
   Outputs:
     AccountId:
