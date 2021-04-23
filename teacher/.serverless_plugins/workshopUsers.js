@@ -58,7 +58,7 @@ class ServerlessPlugin {
         }
 
         this.log(`Generating passwords...`);
-        const crypto = await import('crypto');
+        const crypto = await require('crypto');
         let passwordPromises = [];
         for (let i = 0; i < count; i++) {
             passwordPromises.push(this.randomPassword(crypto));
