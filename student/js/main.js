@@ -27,6 +27,8 @@ var awsLogin = new Vue({
                 userName: cache.get('initializationUserName'),
                 company: cache.get('initializationUserCompany'),
                 valid: true,
+                statusMessage: "",
+                loading: false,
             },
             gameConfig: {
                 aws: {
@@ -44,8 +46,10 @@ var awsLogin = new Vue({
                     scoresBucket: "",
                 }
             },
-            loading: false,
-            statusMessage: "",
+            sts: {
+                statusMessage: "",
+                loading: false,
+            },
             showPasswords: false
         };
     },
@@ -76,10 +80,10 @@ var awsLogin = new Vue({
             this.gameConfig = newConfig
         },
         loadConfig: async function() {
-            this.loading = true;
+            this.initialization.loading = true;
             if (this.notSecure) {
-                this.statusMessage = "Running on not secure connection. Will not expose passwords";
-                this.loading = false;
+                this.initialization.statusMessage = "Running on not secure connection. Will not expose passwords";
+                this.initialization.loading = false;
             }
             let s = document.createElement("script");
             s.type = "text/javascript";
@@ -87,22 +91,22 @@ var awsLogin = new Vue({
             let self = this;
             s.onload = () => {
                 if (!Config) {
-                    self.statusMessage = "Invalid config file";
+                    self.initialization.statusMessage = "Invalid config file";
                     self.initialization.valid = false;
-                    self.loading = false;
+                    self.initialization.loading = false;
                     return;
                 }
                 self.setConfig(Config)
                 cache.set('initializationUserName', self.initialization.userName);
                 cache.set('initializationUserCompany', self.initialization.company);
-                self.statusMessage = "Config loaded";
+                self.initialization.statusMessage = "Config loaded";
                 self.initialization.valid = true;
-                self.loading = false;
+                self.initialization.loading = false;
             }
             s.onerror = () => {
-                self.statusMessage = "Bad login";
+                self.initialization.statusMessage = "Bad login";
                 self.initialization.valid = false;
-                self.loading = false;
+                self.initialization.loading = false;
             }
             document.body.append(s);
         },
@@ -111,8 +115,8 @@ var awsLogin = new Vue({
             AWS.config.update({
                 region: this.region,
                 credentials: new AWS.Credentials({
-                    accessKeyId: this.accessKey.trim(),
-                    secretAccessKey: this.secretKey.trim(),
+                    accessKeyId: this.gameConfig.aws.accessKey.trim(),
+                    secretAccessKey: this.gameConfig.aws.secretKey.trim(),
                 })
             });
         },
@@ -122,18 +126,14 @@ var awsLogin = new Vue({
 
             // Trying to login
             try {
-                this.loading = true;
+                this.sts.loading = true;
                 let sts = new AWS.STS();
                 let result = await sts.getCallerIdentity({}).promise();
-                this.statusMessage = "Logged in as:\n" + JSON.stringify(result, null, 2);
-                this.gameConfig.aws = {
-                    accountId: result.Account,
-                    userName: result.Arn.split('/aws-workshop/')[1],
-                };
-                this.loading = false;
+                this.sts.statusMessage = "Logged in as:\n" + JSON.stringify(result, null, 2);
+                this.sts.loading = false;
             } catch (error) {
-                this.statusMessage = 'ERROR: ' + error;
-                this.loading = false;
+                this.sts.statusMessage = 'ERROR: ' + error;
+                this.sts.loading = false;
                 return;
             }
 
