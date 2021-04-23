@@ -113,9 +113,9 @@ See [docs for getting personalized credentials](student/README.md)
    - [x] VPC example
    - [x] Cost optimization while in development
    - [x] Creation of EC2
-   - [ ] Automating per user nginx/parameters creation
-   - [ ] Automating check of response (before and after)
    - [ ] Docs for beginners and experts
+   - [ ] Automating per user nginx/parameters creation (_postponed_)
+   - [ ] Automating check of response (before and after (_postponed_))
    - [ ] :x: Spot instance quotas for new AWS accounts
 - [ ] :hourglass: v0.4.0 Gamification via Lambda based quizzes
    - [ ] Steps to EC2
@@ -137,6 +137,7 @@ See [docs for getting personalized credentials](student/README.md)
    - [ ] Error checks for array out of index access 
    - [ ] Better stack cleanup (remove from S3)
    - [ ] Split serverless.yml (required additional plugins)
+   - [ ] For ssm TerminateSession use `arn:aws:ssm:*:*:session/${aws:username}-*`
 - [ ] :hourglass: v0.10.0 More content
 
 

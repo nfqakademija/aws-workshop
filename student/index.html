@@ -94,23 +94,162 @@
             <div class="col s12 m6">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title">Finding network settings</span>
-                        <p>What is/are IP address(es) of my service</p>
+                        <span class="card-title">They said I can fix the problem</span>
+                        <p>
+                            Elli have created some <code>starship</code> service on AWS, but now <strong>he is on holiday</strong>.<br/>
+                            It turned out there was <strong>bad value</strong> <code>sha1</code> instead of <code>argon2</code>
+                            in <code>/home/ssm-user/parameters.yml</code> <strong>file</strong>.<br/>
+                            News is already spreading on Facebook and Reddit.<br/>
+                            Manager called you begging for help: "you have access to AWS, please fix it ASAP"
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="col s12">
-                <img class="responsive-img" src="img/vpc-empty.png">
-            </div>
-            <div class="col s12">
-                <img class="responsive-img" src="img/vpc-ec2.png">
-            </div>
+
+            <hints>
+                <hint v-bind:name="'Virtual servers in the Cloud are called Elastic Compute Cloud'">
+                    <h5>Tip</h5>
+                    AWS is Amazon web service) groups all services to:<br/>
+                    <img class="responsive-img" src="img/aws-services.jpg"><br/>
+                    In AWS common services are shortened by same letters.<br/>
+                    Elastic Compute Cloud = EC2<br/>
+                    Simple Storage Service = S3<br/>
+                    Under <b>Compute</b>, you can find <b>EC2</b><br/>
+                    <h5>More information</h5>
+                    <div class="collection">
+                        <a class="collection-item" href="https://aws.amazon.com/getting-started/">Getting started to AWS</a>
+                        <a class="collection-item" href="https://aws.amazon.com/ec2/">EC2 (Elastic compute cloud)</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'UI shows services by Geographical location'">
+                    <h5>Tip</h5>
+                    AWS has a concept of <b>Region</b><br/>
+                    <img class="responsive-img" src="img/regions.jpg"><br/>
+                    Our workshop is deployed to <b>Ireland</b><br/>
+                    Which has programic name of <b>eu-west-1</b>
+                    <h5>More information</h5>
+                    <div class="collection">
+                        <a class="collection-item" href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/">AWS Regions and Availability zones (overview)</a>
+                        <a class="collection-item" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html">AWS Regions and Availability zones (in more details)</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'Instance is one of the mos common component in Elastic Compute Cloud'">
+                    <div class="collection">
+                        <a class="collection-item" href="https://aws.amazon.com/ec2/instance-types/">Instance types</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'I do not have SSH key – can I still connect?'">
+                    We have installed service that can simulate SSH session.<br/>
+                    <div class="collection">
+                        <a class="collection-item" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">EC2 key pairs</a>
+                        <a class="collection-item" href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html">Start a session via AWS Systems Manager</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'Bash in the browser – where is my IDE?'">
+                    <h5>Tip</h5>
+                    You can type<br/>
+                    <code>cat /home/ssm-user/parameters.yml</code><br/>
+                    and hit <i>Eneter</i><br/>
+                    <img class="responsive-img" src="img/ssm-cat-to-parameters-yml.jpg"><br/>
+                    <div class="collection">
+                        <a class="collection-item" href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html">Use outside-of-the-Browser terminal for SSM Sesion</a>
+                        <a class="collection-item" href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html">Start a session via AWS Systems Manager</a>
+                    </div>
+                </hint>
+            </hints>
         </div>
 
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                        <span class="card-title">I am scared it will cost a lot or I will brake something</span>
+                        <p>
+                            During <i>Townhall</i> manager told company had bill of ten hundreds for <i>CloudWatch</i>.<br/>
+                            There were multiple AWS accounts in the organization.<br/>
+                            But you still are not sure – was it your fault?<br/>
+                            Can you prevent it<br/>
+                        </p>
+                    </div>
+                </div>
+            </div>
 
+            <hints>
+                <hint v-bind:name="'There is Billing dashboard'">
+                    <img class="responsive-img" src="img/billing-dashboard.jpg"><br/>
+                    <div class="collection">
+                        <a class="collection-item" href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-what-is.html">AWS Billing and Cost Management</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'AWS has powerful permission management'">
+                    <div class="collection">
+                        <a class="collection-item" href="https://aws.amazon.com/iam/">AWS identity and access management</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'AWS has powerful permission management'">
+                    Some default prevents generated users to see Cost information.
+                    <div class="collection">
+                        <a class="collection-item" href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html">Disabling access to billing</a>
+                    </div>
+                </hint>
+            </hints>
+        </div>
+    </div>
+
+    <div class="page">
+        <h3>Networking in AWS</h3>
+
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                        <span class="card-title">Is AWS just another hosting provider</span>
+                        <p>
+                            Client want to use firewall and identify my service by IP address.
+                            Colleague told something about <b>VPC</b> and <b>NATs</b>,<br/>
+                            is it related to <b>Security groups</b>?
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <hints>
+                <hint v-bind:name="'Virtual private cloud – everything you need for custom Network solutions'">
+                    <div class="collection">
+                        <a class="collection-item" href="https://docs.aws.amazon.com/vpc/latest/userguide/how-it-works.html">How Amazon VPC works</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'High availability – why should I care about subnets?'">
+                    <img class="responsive-img" src="img/vpc-empty.png">
+                    <div class="collection">
+                        <a class="collection-item" href="https://docs.aws.amazon.com/whitepapers/latest/real-time-communication-on-aws/high-availability-and-scalability-on-aws.html">High Availability and Scalability on AWS</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'Is there a different way to go in and out?'">
+                    <img class="responsive-img" src="img/vpc-ec2.png"></br>
+                    <b>Internet Gateway</b> are used for outgoing traffic from Public networks<br/>
+                    <b>NAT Gateway</b> are used for outgoing traffic from Private networks (it sits in Public network)<br/>
+                    Instances in same VPC can have <b>both private and public IP addresses</b>, so they can communicate with each others.<br/>
+                    Traffic gets into VPC via public subnets (instances or load balancers in Public subnet).<br/>
+                    Multiple subnets are used to ensure High availability (e.g. via Auto scaling groups).
+                    <div class="collection">
+                        <a class="collection-item" href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html">Disabling access to billing</a>
+                        <a class="collection-item" href="https://aws.amazon.com/autoscaling/">Auto scaling (to ensure high availability)</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'Roles for your network management'">
+                    <div class="collection">
+                        <a class="collection-item" href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">Security groups for your VPC</a>
+                    </div>
+                </hint>
+            </hints>
+        </div>
+    </div>
 </div>
 
 
+    <script type="text/javascript" src="js/hints.js"></script>
+    <script type="text/javascript" src="js/hint.js"></script>
     <script type="text/javascript" src="js/loading.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 </body>

@@ -74,6 +74,22 @@ resources:
               Resource:
                 - !GetAtt ScoresBucket.Arn
                 - !Sub "arn:aws:s3:::${ScoresBucket}/*"
+            - Effect: Allow
+              Action:
+                - "ssm:StartSession"
+              Resource: "*"
+              Condition:
+                StringLike:
+                  "ssm:resourceTag/aws:cloudformation:stack-id":
+                      - !Ref "AWS::StackId"
+            - Effect: Allow
+              Action:
+                - "ssm:TerminateSession"
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - "aws-portal:ViewBilling"
+              Resource: "*"
 
     Colleagues:
       Type: AWS::IAM::Group
@@ -476,6 +492,7 @@ resources:
                 #!/bin/bash
                 yum update -y
                 yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+                echo "encryption: sha1" > /home/ssm-user/parameters.yml
 
     # Runnable instances
     AutoScalingGroup:

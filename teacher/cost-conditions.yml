@@ -23,6 +23,6 @@ instanceMarketOptions: #example of using Spat instance (if quota increase is alr
     MaxPrice: 0.0015
     SpotInstanceType: "one-time"
 
-asgMin: 1
+asgMin: 0
 asgMax: 2
-asgDesired: 1
+asgDesired: 0
