@@ -32,6 +32,20 @@ functions:
       SCORES_S3_NAME: !Ref ScoresBucket
 
 resources:
+  Conditions: # Do not create all resources for cost optimization
+    NeedVpc: !Equals ["${file(./cost-conditions.yml):createVpc, 'true'}", true]
+    NeedVpcTwoSubnets: !And
+      - !Equals ["${file(./cost-conditions.yml):createVpc, 'true'}", true]
+      - !Equals ["${file(./cost-conditions.yml):twoSubnets, 'true'}", true]
+    NeedPrivateSubnets: !And
+      - !Equals ["${file(./cost-conditions.yml):createVpc, 'true'}", true]
+      - !Equals ["${file(./cost-conditions.yml):privateSubnets, 'true'}", true]
+    NeedTwoPrivateSubnets: !And
+      - !Equals ["${file(./cost-conditions.yml):createVpc, 'true'}", true]
+      - !Equals ["${file(./cost-conditions.yml):twoSubnets, 'true'}", true]
+      - !Equals ["${file(./cost-conditions.yml):privateSubnets, 'true'}", true]
+
+
   Resources:
     # Student (Frontend) specific resources
     Ec2ConnectPolicy:
@@ -153,6 +167,7 @@ resources:
 
     # Networking
     Vpc:
+      Condition: NeedVpc
       Type: AWS::EC2::VPC
       Properties:
         CidrBlock: 10.0.0.0/16
@@ -161,6 +176,7 @@ resources:
             Value: VirtualNetwork
 
     InternetGateway:
+      Condition: NeedVpc
       Type: AWS::EC2::InternetGateway
       Properties:
         Tags:
@@ -168,6 +184,7 @@ resources:
             Value: Internet Gateway
 
     VpcToInternetGateway:
+      Condition: NeedVpc
       Type: AWS::EC2::VPCGatewayAttachment
       Properties:
         VpcId:
@@ -177,6 +194,7 @@ resources:
 
     # Public subnet 1 (with routes, NAT and IGW)
     PublicSubnet1:
+      Condition: NeedVpc
       Type: AWS::EC2::Subnet
       Properties:
         CidrBlock: 10.0.0.0/18
@@ -188,6 +206,7 @@ resources:
             Value: PublicSubnet 1
 
     PublicSubnet1RouteTable:
+      Condition: NeedVpc
       Type: AWS::EC2::RouteTable
       Properties:
         VpcId:
@@ -197,6 +216,7 @@ resources:
             Value: PublicSubnet1 RouteTable
 
     PublicSubnet1RouteTableAssociation:
+      Condition: NeedVpc
       Type: AWS::EC2::SubnetRouteTableAssociation
       Properties:
         RouteTableId:
@@ -205,6 +225,7 @@ resources:
           Ref: PublicSubnet1
 
     PublicSubnet1DefaultRoute:
+      Condition: NeedVpc
       Type: AWS::EC2::Route
       Properties:
         RouteTableId:
@@ -216,6 +237,7 @@ resources:
         - Vpc
 
     PublicSubnet1NatIp:
+      Condition: NeedPrivateSubnets
       Type: AWS::EC2::EIP
       Properties:
         Domain: vpc
@@ -224,6 +246,7 @@ resources:
             Value: NatGatewey1 IP
 
     NatGateway1:
+      Condition: NeedPrivateSubnets
       Type: AWS::EC2::NatGateway
       Properties:
         AllocationId:
@@ -238,6 +261,7 @@ resources:
 
     # Public subnet 1 (with routes, NAT and IGW)
     PublicSubnet2:
+      Condition: NeedVpcTwoSubnets
       Type: AWS::EC2::Subnet
       Properties:
         CidrBlock: 10.0.64.0/18
@@ -249,6 +273,7 @@ resources:
             Value: PublicSubnet2
 
     PublicSubnet2RouteTable:
+      Condition: NeedVpcTwoSubnets
       Type: AWS::EC2::RouteTable
       Properties:
         VpcId:
@@ -258,6 +283,7 @@ resources:
             Value: PublicSubnet2 RouteTable
 
     PublicSubnet2RouteTableAssociation:
+      Condition: NeedVpcTwoSubnets
       Type: AWS::EC2::SubnetRouteTableAssociation
       Properties:
         RouteTableId:
@@ -266,6 +292,7 @@ resources:
           Ref: PublicSubnet2
 
     PublicSubnet2RouteTableDefaultRoute:
+      Condition: NeedVpcTwoSubnets
       Type: AWS::EC2::Route
       Properties:
         RouteTableId:
@@ -277,6 +304,7 @@ resources:
         - Vpc
 
     PublicSubnet2NatIp:
+      Condition: NeedTwoPrivateSubnets
       Type: AWS::EC2::EIP
       Properties:
         Domain: vpc
@@ -285,6 +313,7 @@ resources:
             Value: NatGatewey2 IP
 
     NatGateway2:
+      Condition: NeedTwoPrivateSubnets
       Type: AWS::EC2::NatGateway
       Properties:
         AllocationId:
@@ -299,6 +328,7 @@ resources:
 
     # Private subnet 1 (with routes to NAT gateway)
     PrivateSubnet1:
+      Condition: NeedPrivateSubnets
       Type: AWS::EC2::Subnet
       Properties:
         CidrBlock: 10.0.128.0/18
@@ -310,6 +340,7 @@ resources:
             Value: PrivateSubnet1
 
     PrivateSubnet1RouteTable:
+      Condition: NeedPrivateSubnets
       Type: AWS::EC2::RouteTable
       Properties:
         VpcId:
@@ -319,6 +350,7 @@ resources:
             Value: PrivateSubnet1 RouteTable
 
     PrivateSubnet1RouteTableAssociation:
+      Condition: NeedPrivateSubnets
       Type: AWS::EC2::SubnetRouteTableAssociation
       Properties:
         RouteTableId:
@@ -327,6 +359,7 @@ resources:
           Ref: PrivateSubnet1
 
     PrivateSubnet1DefaultRoute:
+      Condition: NeedPrivateSubnets
       Type: AWS::EC2::Route
       Properties:
         RouteTableId:
@@ -337,6 +370,7 @@ resources:
 
     # Private subnet 2 (with routes to NAT gateway)
     PrivateSubnet2:
+      Condition: NeedTwoPrivateSubnets
       Type: AWS::EC2::Subnet
       Properties:
         CidrBlock: 10.0.192.0/18
@@ -348,6 +382,7 @@ resources:
             Value: PrivateSubnet2
 
     PrivateSubnet2RouteTable:
+      Condition: NeedTwoPrivateSubnets
       Type: AWS::EC2::RouteTable
       Properties:
         VpcId:
@@ -357,6 +392,7 @@ resources:
             Value: PrivateSubnet2 RouteTable
 
     PrivateSubnet2RouteTableAssociation:
+      Condition: NeedTwoPrivateSubnets
       Type: AWS::EC2::SubnetRouteTableAssociation
       Properties:
         RouteTableId:
@@ -365,6 +401,7 @@ resources:
           Ref: PrivateSubnet2
 
     PrivateSubnet2DefaultRoute:
+      Condition: NeedTwoPrivateSubnets
       Type: AWS::EC2::Route
       Properties:
         RouteTableId:

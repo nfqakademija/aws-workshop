@@ -1,0 +1,8 @@
+# A way to change amount of resources,
+# so testing of the tool (and learning materials)
+# could be both a good example and not paying for what you do not use
+
+# Networking task (NATs cost the most)
+createVpc: true
+twoSubnets: false
+privateSubnets: false
