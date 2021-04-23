@@ -1,10 +1,31 @@
+const cache = {
+    get: (name) => {
+        let localStorage = window.localStorage;
+        if (!localStorage) {
+            return '';
+        }
+        return localStorage.getItem(name);
+    },
+    set: (name, value) => {
+        let localStorage = window.localStorage;
+        if (!localStorage) {
+            return;
+        }
+        if (!value) {
+            localStorage.removeItem(name);
+            return;
+        }
+        localStorage.setItem(name, value);
+    },
+}
+
 var awsLogin = new Vue({
     el: '#spa',
     data: function () {
         return {
             initialization: {
-                userName: "",
-                company: "",
+                userName: cache.get('initializationUserName'),
+                company: cache.get('initializationUserCompany'),
                 valid: true,
             },
             gameConfig: {
@@ -72,6 +93,8 @@ var awsLogin = new Vue({
                     return;
                 }
                 self.setConfig(Config)
+                cache.set('initializationUserName', self.initialization.userName);
+                cache.set('initializationUserCompany', self.initialization.company);
                 self.statusMessage = "Config loaded";
                 self.initialization.valid = true;
                 self.loading = false;

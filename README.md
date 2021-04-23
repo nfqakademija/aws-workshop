@@ -99,15 +99,16 @@ See [docs for getting personalized credentials](student/README.md)
       - [x] Vue.js
       - [x] Check score on frontend
       - [x] Frontend: Read scores of all (teacher would use user's flow)
-- [x] :hourglass: v0.1.0 Tool just to create AWS logins
+- [x] :heavy_check_mark: v0.1.0 Tool just to create AWS logins
    - [x] Cleanup PoC code
    - [x] Store Frontend on S3
    - [x] Credentials from e-mail
    - [x] Limit IAM access (can read credentials, but will not accidentally purchase/change something big)
    - [x] Image upload issues (Byte stream?)
    - [x] ListObject security leak
-- [ ] :hourglass: v0.2.0 Tool code to illustrate AWS concepts (concepts explain verbally)
-   - [ ] Put some text (topics) to guide the speaking  
+- [ ] :x: v0.2.0 Tool code to illustrate AWS concepts (concepts explain verbally)
+   - [x] Remember User login in the browser (not reentering after browser refresh)
+   - [ ] Put some text (topics) to guide the speaking (feels not natural, skipping)  
 - [ ] :hourglass: v0.3.0 Single realistic example and references in the code
    - [ ] Creation of EC2
    - [ ] Automating per user nginx/parameters creation
@@ -132,7 +133,7 @@ See [docs for getting personalized credentials](student/README.md)
    - [ ] Better way to authenticate participants
    - [ ] Error checks for array out of index access 
    - [ ] Better stack cleanup (remove from S3)
-   - [ ] Remember User login in the browser (not reentering after browser refresh)
+   
 - [ ] :hourglass: v0.10.0 More content
 
 
