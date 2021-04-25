@@ -51,6 +51,7 @@ resources:
       - !Equals ["${file(./cost-conditions.yml):createVpc, 'true'}", true]
       - !Equals ["${file(./cost-conditions.yml):ec2Template, 'true'}", true]
       - !Equals ["${file(./cost-conditions.yml):ec2Asg, 'true'}", true]
+    NeedSecretResource: !Equals ["${file(./cost-conditions.yml):needSecretResource, 'true'}", true]
 
   Resources:
     # Student (Frontend) specific resources
@@ -509,6 +510,29 @@ resources:
           Version: !GetAtt LaunchTemplateConfig.LatestVersionNumber
         VPCZoneIdentifier: ${file(./cost-conditions.yml):ec2Subments}
 
+    # Example of accessing secrets (passwords)
+    ProductionSecrets:
+      Condition: NeedSecretResource
+      Type: AWS::SecretsManager::Secret
+      Properties:
+        Description: Example of secret, that should be accessible from instance, not the regular user
+
+    ProductionSecretsPolicy:
+      Condition: NeedSecretResource
+      Type: "AWS::IAM::Policy"
+      Properties:
+        PolicyName: "allow-reading-production-secret"
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "secretsmanager:GetSecretValue"
+              Resource:
+                - !Ref ProductionSecrets
+        Roles:
+          - !Ref InstanceRole
+
   Outputs:
     AccountId:
       Description: AWS Account number, where all tasks should be executed on
@@ -519,6 +543,10 @@ resources:
     ScoresBucketName:
       Description: Name of the bucket, where shores will be stored (and read from by UI)
       Value: !Ref ScoresBucket
+    ProductionSecretsArn:
+      Condition: NeedSecretResource
+      Description: Name of ProductionSecrets resource – so it could be referenced from API/CDK
+      Value: !Ref ProductionSecrets
     AwsWorkshopBucketName:
       Description: Entry point bucket name (where all Frontend assets will be deployed)
       Value: !Ref AwsWorkshop

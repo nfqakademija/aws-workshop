@@ -14,5 +14,8 @@ var Config = {
     "scoresBucket": "EXAMPLE-NAME",
     "maxScore": 20,
   },
-  "students": ["example@example.com"]
+  "students": ["example@example.com"],
+  "secrets": {
+    "productionSecretsArn": ""
+  }
 }

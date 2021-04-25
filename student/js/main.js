@@ -46,7 +46,10 @@ var awsLogin = new Vue({
                     scoresBucket: "",
                     maxScore: 20
                 },
-                students: []
+                students: [],
+                "secrets": {
+                    "productionSecretsArn": ""
+                }
             },
             sts: {
                 statusMessage: "",

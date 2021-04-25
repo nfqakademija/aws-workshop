@@ -254,7 +254,10 @@ class ServerlessPlugin {
                     "scoresBucket": outputByKey.ScoresBucketName,
                     "maxScore": 20,
                 },
-                "students": students
+                "students": students,
+                "secrets": {
+                    "productionSecretsArn": outputByKey.ProductionSecretsArn,
+                }
             }
             const fileContent = 'var Config = ' + JSON.stringify(config, null, 2);
 

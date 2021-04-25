@@ -306,7 +306,7 @@
         <div class="row">
             <form target="#">
                 <div class="input-field col s6">
-                    <h3>For the WebSite</h3>
+                    <h3>Credentials for this Web site/system</h3>
                     <div>
                         <input v-model="gameConfig.aws.accessKey" placeholder="Access key id" id="access_key" type="text" class="validate"/>
                         <label for="access_key">Access key</label>
@@ -340,6 +340,11 @@
                     <div v-if="sts.statusMessage !== ''" class="collection z-depth-2 status--preformatted">{{ sts.statusMessage }}</div>
                 </div>
             </form>
+        </div>
+        <div class="row">
+            <secret v-bind:secret-arn="gameConfig.secrets.productionSecretsArn">
+                Can you (accidentally) fetch productions credentials?
+            </secret>
         </div>
     </div>
 
@@ -412,6 +417,7 @@
     <script type="text/javascript" src="js/hint.js"></script>
     <script type="text/javascript" src="js/loading.js"></script>
     <script type="text/javascript" src="js/score.js"></script>
+    <script type="text/javascript" src="js/secret.js"></script>
     <script type="text/javascript" src="js/question.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 </body>

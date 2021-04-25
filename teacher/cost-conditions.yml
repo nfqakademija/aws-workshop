@@ -8,6 +8,7 @@ twoSubnets: false
 privateSubnets: false
 ec2Tempalte: true
 ec2Asg: true
+needSecretResource: false
 
 ec2Subments: # it was coo complex to automate by variables: twoSubnets+privateSubnets
   - !Ref PublicSubnet1
