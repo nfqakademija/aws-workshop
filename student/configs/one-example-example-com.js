@@ -17,5 +17,6 @@ var Config = {
   "students": ["example@example.com"],
   "secrets": {
     "productionSecretsArn": ""
-  }
+  },
+  "costSavingMode": true
 }

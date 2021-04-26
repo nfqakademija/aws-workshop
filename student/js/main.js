@@ -49,7 +49,8 @@ var awsLogin = new Vue({
                 students: [],
                 "secrets": {
                     "productionSecretsArn": ""
-                }
+                },
+                "costSavingMode": true
             },
             sts: {
                 statusMessage: "",

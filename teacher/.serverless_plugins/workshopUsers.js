@@ -257,7 +257,8 @@ class ServerlessPlugin {
                 "students": students,
                 "secrets": {
                     "productionSecretsArn": outputByKey.ProductionSecretsArn,
-                }
+                },
+                "costSavingMode": true
             }
             const fileContent = 'var Config = ' + JSON.stringify(config, null, 2);
 
