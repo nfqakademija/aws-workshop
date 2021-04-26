@@ -238,6 +238,9 @@ class ServerlessPlugin {
         const companies = await this.companies(this.companiesFile())
         const passwords = await this.passwords(students.length);
         for (const i in students) {
+            if (!outputByKey.ProductionSecretsArn) {
+                outputByKey.ProductionSecretsArn = "No resource deployed"
+            }
             const config = {
                 "aws": {
                     "region": this.serverless.getProvider('aws').getRegion(),

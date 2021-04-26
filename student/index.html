@@ -64,11 +64,11 @@
                         </div>
                         <div>
                             <label for="password">Password</label>
-                            <input v-model="gameConfig.aws.password" id="password" v-bind:type="showPasswords ? 'text' : 'password'" class="validate"/>
+                            <input v-model="gameConfig.aws.password" id="password" type="password" class="validate"/>
                         </div>
                         <div class="login-form__submit-area">
-                            <button v-on:click="showPasswords = !showPasswords" class="btn waves-effect waves-light" type="button">Show passwords
-                                <i class="material-icons right" title="show password">visibility</i>
+                            <button v-on:click="copyToClipboard(gameConfig.aws.password)" class="btn waves-effect waves-light" type="button">Copy password
+                                <i class="material-icons right">content_copy</i>
                             </button>
                             <a v-bind:href="'https://'+gameConfig.aws.accountId+'.signin.aws.amazon.com/console/'" target="_blank" class="btn waves-effect waves-light" type="button">
                                 Go to AWS Console <i class="material-icons right">send</i>
@@ -314,12 +314,12 @@
                         <label for="access_key">Access key</label>
                     </div>
                     <div>
-                        <input v-model="gameConfig.aws.secretKey" id="secret_key" v-bind:type="showPasswords ? 'text' : 'password'" class="validate"/>
+                        <input v-model="gameConfig.aws.secretKey" id="secret_key" type="password" class="validate"/>
                         <label for="secret_key">Secret key</label>
                     </div>
                     <div class="login-form__submit-area">
-                        <button v-on:click="showPasswords = !showPasswords" class="btn waves-effect waves-light" type="button">Show passwords
-                            <i class="material-icons right" title="show password">visibility</i>
+                        <button v-on:click="copyToClipboard(gameConfig.aws.secretKey)" class="btn waves-effect waves-light" type="button">Copy password
+                            <i class="material-icons right">content_copy</i>
                         </button>
                         <button v-on:click="login" class="btn waves-effect waves-light" type="button">Test logins
                             <i class="material-icons right">send</i>
@@ -345,7 +345,7 @@
         </div>
         <div class="row">
             <div v-if="gameConfig.costSavingMode" class="card-panel red lighten-1">Virtual instances not created yet because saving costs. Will be enabled during workshop hours</div>
-            <secret v-bind:secret-arn="gameConfig.secrets.productionSecretsArn">
+            <secret v-bind:arn="gameConfig.secrets.productionSecretsArn">
                 Can you (accidentally) fetch productions credentials?
             </secret>
         </div>

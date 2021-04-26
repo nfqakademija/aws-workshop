@@ -55,8 +55,7 @@ var awsLogin = new Vue({
             sts: {
                 statusMessage: "",
                 loading: false,
-            },
-            showPasswords: false
+            }
         };
     },
     computed: {
@@ -149,6 +148,22 @@ var awsLogin = new Vue({
                 return false;
             }
         },
+        copyToClipboard(value) {
+            const textarea = document.createElement('textarea')
+            textarea.value = value
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'absolute';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select()
+            try {
+                var successful = document.execCommand('copy');
+                console.log('copied')
+            } catch(err) {
+                console.warn('Failed', err)
+            }
+            textarea.remove()
+        }
     }
 });
 

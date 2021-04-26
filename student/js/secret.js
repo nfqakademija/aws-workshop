@@ -25,7 +25,7 @@ Vue.component('secret', {
                             Try running this in EC2 instance
                         </div>
                         <div class="card-action">
-                            <code>aws --region=eu-west-1 secretsmanager get-secret-value --secret-id {{secretArn}}</code>                            
+                            <code>aws --region=eu-west-1 secretsmanager get-secret-value --secret-id {{arn}}</code>                            
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@ Vue.component('secret', {
         </div>
     </div>`,
     props: {
-        secretArn: {
+        arn: {
             type: String,
             required: true
         },
@@ -71,7 +71,7 @@ Vue.component('secret', {
             this.loading = true;
             try {
                 let secretsManager = new AWS.SecretsManager();
-                let result = await secretsManager.getSecretValue({SecretId: this.secretArn}).promise();
+                let result = await secretsManager.getSecretValue({SecretId: this.arn}).promise();
                 this.statusMessage = "Result:\n" + JSON.stringify(result, null, 2)
             } catch (error) {
                 this.statusMessage = 'ERROR: ' + error;
