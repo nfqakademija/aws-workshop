@@ -57,3 +57,13 @@
     color: rgba(0,0,0, 0.3);
     padding-top: 40px;
 }
+
+nav {
+    opacity: 0.5;
+    height: 30px;
+    line-height: 30px;
+}
+
+nav:hover {
+    opacity: 1;
+}

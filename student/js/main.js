@@ -30,6 +30,7 @@ var awsLogin = new Vue({
                 statusMessage: "",
                 loading: false,
             },
+            visibleSection: "logins",
             gameConfig: {
                 aws: {
                     region: "eu-west-1",
@@ -163,7 +164,31 @@ var awsLogin = new Vue({
                 console.warn('Failed', err)
             }
             textarea.remove()
+        },
+        handleScroll: function () {
+            this.visibleSection = this.calculateVisibleSection();
+        },
+        calculateVisibleSection: function () {
+            let logins = document.getElementById('logins').getBoundingClientRect().y;
+            let basics = document.getElementById('basics').getBoundingClientRect().y;
+            let complex = document.getElementById('complex').getBoundingClientRect().y;
+            let trending = document.getElementById('trending').getBoundingClientRect().y;
+
+            const navSize = 30;
+            if (basics <= navSize && complex > navSize) {
+                return 'basics';
+            }
+            if (complex <= navSize && trending > navSize) {
+                return 'complex'
+            }
+            if (trending <= navSize) {
+                return 'trending';
+            }
+            return "logins";
         }
+    },
+    mounted() {
+        document.addEventListener('scroll', this.handleScroll)
     }
 });
 

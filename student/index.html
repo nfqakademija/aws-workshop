@@ -42,8 +42,21 @@
         </form>
     </div>
 
+    <div class="navbar-fixed">
+        <nav class="teal darken-2 small">
+            <div class="nav-wrapper">
+                <span>Dive into AWS Cloud</span>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li v-bind:class="visibleSection === 'logins' ? 'active' : ''"><a href="#logins">Logins</a></li>
+                    <li v-bind:class="visibleSection === 'basics' ? 'active' : ''"><a href="#basics">Basics</a></li>
+                    <li v-bind:class="visibleSection === 'complex' ? 'active' : ''"><a href="#complex">Hard concepts</a></li>
+                    <li v-bind:class="visibleSection === 'trending' ? 'active' : ''"><a href="#trending">Trending technologies</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
 
-    <div class="page page--full page--dive-into-the-cloud">
+    <div id="logins" class="page page--full page--dive-into-the-cloud">
         <h1>Dive into the Cloud</h1>
     </div>
 
@@ -83,7 +96,7 @@
         </div>
     </div>
 
-    <div class="page page--full page--on-the-ground">
+    <div id="basics" class="page page--full page--on-the-ground">
         <h1>Let's start from the ground</h1>
     </div>
 
@@ -197,6 +210,10 @@
         </div>
     </div>
 
+    <div id="complex" class="page page--full page--rocket-science">
+        <h1>They say it is a Rocket science</h1>
+    </div>
+
     <div class="page">
         <h3>Networking in AWS</h3>
 
@@ -247,7 +264,6 @@
             </hints>
         </div>
     </div>
-
 
     <div class="page">
         <h3>Security in AWS</h3>
@@ -349,6 +365,10 @@
                 Can you (accidentally) fetch productions credentials?
             </secret>
         </div>
+    </div>
+
+    <div id="trending" class="page page--full page--future-landing">
+        <h1>What about technologies of the future</h1>
     </div>
 
     <div class="page">
