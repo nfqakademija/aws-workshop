@@ -22,6 +22,7 @@ package:
     - '!config/**'
     - '!.npmignore'
     - '!.serverless_plugins'
+    - '!cost-conditions.yml'
     - '!README.md'
 
 functions:

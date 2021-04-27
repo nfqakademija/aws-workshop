@@ -208,6 +208,54 @@
                 </hint>
             </hints>
         </div>
+
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                        <span class="card-title">Learning to learn</span>
+                        <p>
+                            AWS seems so big, how to start learning?
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <hints>
+                <hint v-bind:name="'AWS has good documentation per service'">
+                    Each service have a good <i>Getting started</i> page<br/>
+                    <img class="responsive-img" src="img/aws-getting-started.jpg"/><br/>
+                    For example:<br/>
+                    <div class="collection">
+                        <a class="collection-item" href="https://aws.amazon.com/ec2/getting-started/">EC2 (Virtual machines)</a>
+                        <a class="collection-item" href="https://aws.amazon.com/s3/getting-started/?nc=sn&loc=6&dn=1/">S3 (infinite storage)</a>
+                        <a class="collection-item" href="https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started.html">IAM (permissions and security)</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'AWS service abbreviations are easy to google'">
+                    EC2 (Elastic Compute Cloud) – 1 E letter and 2 C letters<br/>
+                    S3 (Simple Storage Service) - 3 S letters<br/>
+                    SNS (Simple Notification Service) – easier to google by <code>AWS SNS</code><br/>
+                    And so on...
+                </hint>
+                <hint v-bind:name="'There are official and free video tutorials'">
+                    You can filter free (<code>Digital Training</code>) videos, language (E.g. <code>English</code>),
+                    level (E.g. <code>Fundamental</code>) and topic/domain (E.g. <code>Networking & Content delivery</code>)<br/>
+                    <img class="responsive-img" src="img/aws-training.jpg"/><br/>
+                    Also there are a lot of demos in <i>ReInvent</i>
+                    <div class="collection">
+                        <a class="collection-item" href="https://www.aws.training/LearningLibrary">Videos about services (by skill level)</a>
+                        <a class="collection-item" href="https://www.youtube.com/c/amazonwebservices/videos">AWS Youtube channel</a>
+                    </div>
+                </hint>
+                <hint v-bind:name="'What about advanced topics?'">
+                    <div class="collection">
+                        <a class="collection-item" href="https://acloudguru.com/">Fully featured learning platform</a>
+                        <a class="collection-item" href="https://github.com/open-guides/og-aws">Community driven resources</a>
+                    </div>
+                </hint>
+            </hints>
+        </div>
     </div>
 
     <div id="complex" class="page page--full page--rocket-science">
