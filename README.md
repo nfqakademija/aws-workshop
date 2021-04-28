@@ -36,7 +36,9 @@ See [docs for getting personalized credentials](student/README.md)
     * It is **fun to hack what is possible** and create **value to the community**
       (_however, not all assumptions are valid and workarounds requires a lot of effort_)
 
- * In this format (while there already [A Cloud Guru](https://acloudguru.com/), [AWS Classroom training](https://aws.amazon.com/training/classroom/), etc...)
+ * In this format (while there already [A Cloud Guru](https://acloudguru.com/),
+   [Full day introduction classes](https://www.aws.training/Details/InstructorLedTraining?id=71570),
+   [AWS Classroom training](https://aws.amazon.com/training/classroom/), etc...)
     * From Practice to theory
      
       > Most online material starts with abstract concepts and then goes to _Hello world_ examples.

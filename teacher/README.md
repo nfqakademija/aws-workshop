@@ -79,6 +79,8 @@ sls remove
  * Spot instance limits for new AWS accounts (not sure if real issue): https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-limits.html
  * Serverless framework show `Service files not changed. Skipping deployment...` when only Resource part have changed.
    Workaround: `sls deploy --force`
+ * When showing changes on the fly – it is good to check [CloudFormation Drift](https://aws.amazon.com/blogs/aws/new-cloudformation-drift-detection/),
+   because debugging during workshop decrease learning and teaching quality a lot.  
 
 ## References
 
